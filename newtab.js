@@ -13,7 +13,7 @@ class AuraTabManager {
             soundEnabled: true,
             soundTabOpen: true,
             soundTabClose: true,
-            soundPageReload: true,
+            soundPageReload: false,
             showShortcuts: true,
             showWeather: true,
             showTime: true,
@@ -542,7 +542,7 @@ class AuraTabManager {
                 soundUrl = this.settings[customSoundKey];
             } else {
                 // Utiliser le son par défaut
-                soundUrl = chrome.runtime.getURL(`sounds/${soundType}.mp3`);
+                soundUrl = chrome.runtime.getURL(`sounds/${soundType}.wav`);
             }
             
             // Configurer l'audio
@@ -623,22 +623,51 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const soundUrl = chrome.runtime.getURL(`sounds/${soundFile}`);
         
         try {
-            // Créer un nouvel Audio element (contourne le blocage d'autoplay)
-            const audio = new Audio(soundUrl);
-            
-            // Utiliser les paramètres globaux si possible
-            if (window.appManager && window.appManager.settings) {
-                audio.volume = window.appManager.settings.volume / 100;
+            // Vérifier si c'est une Data URL (son personnalisé) ou une URL d'extension
+            if (soundUrl.startsWith('data:')) {
+                // C'est une Data URL, on peut la jouer directement
+                const audio = new Audio(soundUrl);
+                if (window.appManager && window.appManager.settings) {
+                    audio.volume = window.appManager.settings.volume / 100;
+                } else {
+                    audio.volume = 0.7;
+                }
+                audio.play().then(() => {
+                    console.log('🔊 Son joué (personnalisé):', soundFile);
+                }).catch(error => {
+                    console.warn('⚠️ Erreur lecture son:', error);
+                });
             } else {
-                audio.volume = 0.7; // Volume par défaut
+                // C'est une URL d'extension, utiliser fetch
+                fetch(soundUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        // Créer une URL blob
+                        const blobUrl = URL.createObjectURL(blob);
+                        
+                        // Créer un nouvel Audio element avec l'URL blob
+                        const audio = new Audio(blobUrl);
+                        
+                        // Utiliser les paramètres globaux si possible
+                        if (window.appManager && window.appManager.settings) {
+                            audio.volume = window.appManager.settings.volume / 100;
+                        } else {
+                            audio.volume = 0.7;
+                        }
+                        
+                        // Jouer le son
+                        audio.play().then(() => {
+                            console.log('🔊 Son joué (par défaut):', soundFile);
+                            // Nettoyer après 5 secondes
+                            setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+                        }).catch(error => {
+                            console.warn('⚠️ Erreur lecture son:', error);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('❌ Erreur chargement du fichier audio:', error);
+                    });
             }
-            
-            // Jouer le son
-            audio.play().then(() => {
-                console.log('🔊 Son joué:', soundFile);
-            }).catch(error => {
-                console.warn('⚠️ Erreur lecture son:', error);
-            });
         } catch (error) {
             console.error('❌ Erreur lors de la lecture du son:', error);
         }
