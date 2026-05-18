@@ -5,6 +5,9 @@
 
 class AuraTabManager {
     constructor() {
+        // Stocker l'instance globale pour accès depuis les listeners
+        window.appManager = this;
+
         this.settings = {
             volume: 70,
             soundEnabled: true,
@@ -27,7 +30,12 @@ class AuraTabManager {
             cooldown: 500 // ms minimum entre deux sons
         };
         
+        // Vérifier que l'élément audio existe
         this.audioPlayer = document.getElementById('sound-player');
+        if (!this.audioPlayer) {
+            console.warn('⚠️ Élément audio-player non trouvé');
+        }
+        
         this.init();
     }
 
@@ -538,17 +546,21 @@ class AuraTabManager {
             }
             
             // Configurer l'audio
-            this.audioPlayer.src = soundUrl;
-            this.audioPlayer.volume = this.settings.volume / 100;
-            
-            // Jouer le son
-            const playPromise = this.audioPlayer.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    // Autoplay peut être bloqué
-                    console.warn('Son bloqué (autoplay):', error);
-                });
+            if (this.audioPlayer) {
+                this.audioPlayer.src = soundUrl;
+                this.audioPlayer.volume = this.settings.volume / 100;
+                
+                // Jouer le son
+                const playPromise = this.audioPlayer.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        // Autoplay peut être bloqué
+                        console.warn('Son bloqué (autoplay):', error);
+                    });
+                }
+            } else {
+                console.warn('Audio player non disponible');
             }
         } catch (error) {
             console.error('Erreur lors de la lecture du son:', error);
@@ -602,6 +614,37 @@ class AuraTabManager {
         });
     }
 }
+
+// Écouter les messages du background pour jouer les sons
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'playSoundFromBackground') {
+        // Jouer le son demandé par le background
+        const soundFile = request.soundFile;
+        const soundUrl = chrome.runtime.getURL(`sounds/${soundFile}`);
+        
+        try {
+            // Créer un nouvel Audio element (contourne le blocage d'autoplay)
+            const audio = new Audio(soundUrl);
+            
+            // Utiliser les paramètres globaux si possible
+            if (window.appManager && window.appManager.settings) {
+                audio.volume = window.appManager.settings.volume / 100;
+            } else {
+                audio.volume = 0.7; // Volume par défaut
+            }
+            
+            // Jouer le son
+            audio.play().then(() => {
+                console.log('🔊 Son joué:', soundFile);
+            }).catch(error => {
+                console.warn('⚠️ Erreur lecture son:', error);
+            });
+        } catch (error) {
+            console.error('❌ Erreur lors de la lecture du son:', error);
+        }
+        sendResponse({ success: true });
+    }
+});
 
 // Initialiser l'application au chargement du DOM
 if (document.readyState === 'loading') {

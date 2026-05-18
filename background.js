@@ -160,27 +160,23 @@ function playSound(soundFile) {
     soundSpamProtection[soundKey] = now;
 
     try {
-        // Obtenir l'URL du fichier son
-        const soundUrl = chrome.runtime.getURL(`sounds/${soundFile}`);
-
-        // Créer un audio element pour jouer le son
-        const audio = new Audio(soundUrl);
-        audio.volume = globalSettings.volume / 100;
-        
-        // Jouer le son
-        const playPromise = audio.play();
-        
-        if (playPromise !== undefined) {
-            playPromise
-                .then(() => {
-                    console.log('🔊 Son joué:', soundFile);
-                })
-                .catch(error => {
-                    console.warn('⚠️ Erreur lecture son:', error);
+        // Envoyer un message à tous les tabs pour jouer le son
+        // (Service Worker n'a pas accès à Audio API)
+        chrome.tabs.query({}, (tabs) => {
+            tabs.forEach(tab => {
+                // Envoyer le message à chaque tab
+                chrome.tabs.sendMessage(tab.id, {
+                    action: 'playSoundFromBackground',
+                    soundFile: soundFile
+                }).catch(() => {
+                    // Ignore les erreurs (tab peut ne pas être prêt)
                 });
-        }
+            });
+        });
+
+        console.log('🔊 Message de lecture envoyé pour:', soundFile);
     } catch (error) {
-        console.error('❌ Erreur lors de la lecture du son:', error);
+        console.error('❌ Erreur lors de l\'envoi du message audio:', error);
     }
 }
 
@@ -281,14 +277,10 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 /**
  * Démarrage du Service Worker
+ * Note: Service Worker n'a pas accès au DOM, initialisation directe
  */
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initServiceWorker);
-} else {
-    // Le service worker n'a pas de DOM, on initialise directement
-    initServiceWorker();
-    initOpenTabs();
-}
+initServiceWorker();
+initOpenTabs();
 
 // Re-initialiser les onglets ouverts périodiquement (sécurité)
 setInterval(() => {
