@@ -1,0 +1,442 @@
+/* ============================================================
+   AuraTab - Popup Styles CSS
+   ============================================================ */
+
+:root {
+    --primary-color: #00d9ff;
+    --secondary-color: #ff006e;
+    --tertiary-color: #8338ec;
+    --background-dark: #0a0e27;
+    --surface-dark: #1a1f3a;
+    --surface-lighter: #252d47;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a9d8;
+    --text-muted: #6b7594;
+    --border-color: rgba(0, 217, 255, 0.2);
+    --gradient-primary: linear-gradient(135deg, #00d9ff 0%, #8338ec 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 400px;
+    min-height: 600px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--background-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+/* ============================================================
+   Conteneur principal
+   ============================================================ */
+
+.popup-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(to bottom, var(--background-dark), var(--surface-dark));
+}
+
+/* ============================================================
+   En-tête
+   ============================================================ */
+
+.popup-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(26, 31, 58, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.popup-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+}
+
+.popup-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* ============================================================
+   Contenu
+   ============================================================ */
+
+.popup-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.popup-section {
+    margin-bottom: 20px;
+    padding: 16px;
+    background: rgba(26, 31, 58, 0.4);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ============================================================
+   Boutons d'accès rapide
+   ============================================================ */
+
+.quick-btn {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(131, 56, 236, 0.1));
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 200ms ease;
+}
+
+.quick-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(131, 56, 236, 0.2));
+    border-color: var(--primary-color);
+    transform: translateX(2px);
+}
+
+.quick-btn:active {
+    transform: scale(0.98);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+.btn-arrow {
+    margin-left: auto;
+    font-size: 1.2rem;
+}
+
+/* ============================================================
+   Contrôles de son
+   ============================================================ */
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+}
+
+.setting-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.status-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 6px;
+    color: #00ff88;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+.status-btn:hover {
+    background: rgba(0, 255, 136, 0.2);
+}
+
+.status-btn.inactive {
+    background: rgba(255, 56, 96, 0.1);
+    border-color: rgba(255, 56, 96, 0.3);
+    color: #ff3860;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: currentColor;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Toggles mini */
+.toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mini-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.mini-checkbox {
+    display: none;
+}
+
+.mini-slider {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    transition: all 200ms ease;
+    flex-shrink: 0;
+}
+
+.mini-slider::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: var(--text-primary);
+    border-radius: 8px;
+    transition: left 200ms ease;
+}
+
+.mini-checkbox:checked + .mini-slider {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.mini-checkbox:checked + .mini-slider::after {
+    left: 16px;
+}
+
+.toggle-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Contrôle de volume mini */
+.mini-volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 217, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+.volume-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.mini-volume-slider {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(0, 217, 255, 0.2);
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.mini-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+}
+
+.mini-volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: none;
+    cursor: pointer;
+}
+
+.volume-text {
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 35px;
+    text-align: right;
+}
+
+/* ============================================================
+   Prévisualisation fond d'écran
+   ============================================================ */
+
+.mini-wallpaper-preview {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(131, 56, 236, 0.1));
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+.mini-wallpaper-preview:hover {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(131, 56, 236, 0.15));
+}
+
+.mini-preview {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 39, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 200ms ease;
+}
+
+.mini-wallpaper-preview:hover .preview-overlay {
+    opacity: 1;
+}
+
+.change-btn {
+    padding: 8px 16px;
+    background: var(--gradient-primary);
+    color: var(--background-dark);
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.change-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ============================================================
+   Informations
+   ============================================================ */
+
+.info-box {
+    display: flex;
+    gap: 16px;
+    font-size: 0.85rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.info-label {
+    color: var(--text-muted);
+}
+
+.info-value {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.status-active {
+    color: #00ff88;
+}
+
+/* ============================================================
+   Pied de page
+   ============================================================ */
+
+.popup-footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    font-size: 0.85rem;
+    background: rgba(26, 31, 58, 0.5);
+}
+
+.footer-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 200ms ease;
+}
+
+.footer-link:hover {
+    color: var(--secondary-color);
+}
+
+/* ============================================================
+   Scrollbar personnalisée
+   ============================================================ */
+
+.popup-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.popup-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.popup-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 217, 255, 0.3);
+    border-radius: 3px;
+}
+
+.popup-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 217, 255, 0.5);
+}

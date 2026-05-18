@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraTab Settings</title>
+    <link rel="stylesheet" href="popup-style.css">
+</head>
+<body>
+    <div class="popup-container">
+        <!-- En-tête -->
+        <div class="popup-header">
+            <h1 class="popup-title">🌟 AuraTab</h1>
+            <div class="popup-subtitle">Configuration rapide</div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="popup-content">
+            <!-- Section Accès rapide -->
+            <div class="popup-section">
+                <h2 class="section-title">⚡ Accès rapide</h2>
+                
+                <button id="open-settings-btn" class="quick-btn">
+                    <span class="btn-icon">⚙️</span>
+                    <span>Paramètres complets</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+
+                <button id="new-tab-btn" class="quick-btn">
+                    <span class="btn-icon">📄</span>
+                    <span>Nouvel onglet personnalisé</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+            </div>
+
+            <!-- Section Son -->
+            <div class="popup-section">
+                <h2 class="section-title">🔊 Effets sonores</h2>
+
+                <div class="setting-item">
+                    <span class="setting-label">État du son:</span>
+                    <button id="sound-status-btn" class="status-btn active">
+                        <span class="status-dot"></span>
+                        Activé
+                    </button>
+                </div>
+
+                <div class="toggle-group">
+                    <label class="mini-toggle">
+                        <input type="checkbox" id="tab-open-toggle" class="mini-checkbox" checked>
+                        <span class="mini-slider"></span>
+                        <span class="toggle-text">Ouverture onglet</span>
+                    </label>
+
+                    <label class="mini-toggle">
+                        <input type="checkbox" id="tab-close-toggle" class="mini-checkbox" checked>
+                        <span class="mini-slider"></span>
+                        <span class="toggle-text">Fermeture onglet</span>
+                    </label>
+
+                    <label class="mini-toggle">
+                        <input type="checkbox" id="page-reload-toggle" class="mini-checkbox" checked>
+                        <span class="mini-slider"></span>
+                        <span class="toggle-text">Rechargement</span>
+                    </label>
+                </div>
+
+                <!-- Contrôle du volume mini -->
+                <div class="mini-volume-control">
+                    <svg class="volume-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.26 2.5-4.02z"></path>
+                    </svg>
+                    <input type="range" id="popup-volume-slider" class="mini-volume-slider" 
+                           min="0" max="100" value="70">
+                    <span id="popup-volume-text" class="volume-text">70%</span>
+                </div>
+
+                <!-- Bouton tester les sons -->
+                <button id="test-sounds-popup-btn" class="quick-btn test-sounds-btn">
+                    <span class="btn-icon">🔊</span>
+                    <span>Tester les sons</span>
+                </button>
+            </div>
+
+            <!-- Section Fond d'écran -->
+            <div class="popup-section">
+                <h2 class="section-title">🎨 Fond d'écran</h2>
+
+                <div class="mini-wallpaper-preview">
+                    <div id="popup-wallpaper-preview" class="mini-preview"></div>
+                    <div class="preview-overlay">
+                        <button id="change-wallpaper-btn" class="change-btn">📤 Changer</button>
+                    </div>
+                </div>
+
+                <input type="file" id="popup-wallpaper-input" accept="image/png,image/jpeg,image/gif" 
+                       style="display: none;">
+            </div>
+
+            <!-- Section Informations -->
+            <div class="popup-section">
+                <div class="info-box">
+                    <div class="info-item">
+                        <span class="info-label">Version:</span>
+                        <span class="info-value">1.0.0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Statut:</span>
+                        <span class="info-value status-active">✅ Actif</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pied de page -->
+        <div class="popup-footer">
+            <a href="#" id="feedback-link" class="footer-link">💬 Retours</a>
+            <a href="#" id="help-link" class="footer-link">❓ Aide</a>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

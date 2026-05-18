@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d9ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8338ec;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff006e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" fill="url(#grad2)" rx="20"/>
+  <circle cx="64" cy="48" r="20" fill="#0a0e27" opacity="0.8"/>
+  <path d="M 50 80 Q 64 90 78 80" stroke="#0a0e27" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <text x="64" y="120" font-size="36" font-weight="bold" fill="#0a0e27" text-anchor="middle" font-family="Arial">AT</text>
+</svg>

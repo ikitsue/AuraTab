@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraTab - New Tab</title>
+    <link rel="stylesheet" href="newtab-style.css">
+</head>
+<body>
+    <!-- Fond d'écran dynamique -->
+    <div id="wallpaper-container" class="wallpaper-container">
+        <div id="wallpaper-display" class="wallpaper-display"></div>
+        <div class="wallpaper-overlay"></div>
+    </div>
+
+    <!-- Conteneur principal -->
+    <div class="main-container">
+        <!-- En-tête avec horloge et température -->
+        <header class="header">
+            <div class="clock-widget">
+                <div id="time" class="time">00:00</div>
+                <div id="date" class="date">Lundi, 18 mai</div>
+            </div>
+            <div class="weather-widget">
+                <span id="temp" class="temp">--°C</span>
+            </div>
+        </header>
+
+        <!-- Section de recherche Google -->
+        <section class="search-section">
+            <div class="search-container">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    class="search-input" 
+                    placeholder="Rechercher sur Google..."
+                    aria-label="Rechercher"
+                >
+            </div>
+        </section>
+
+        <!-- Raccourcis rapides -->
+        <section class="shortcuts-section">
+            <div class="shortcuts-grid" id="shortcuts-grid">
+                <a href="https://gmail.com" class="shortcut-card" title="Gmail">
+                    <div class="shortcut-icon">📧</div>
+                    <span>Gmail</span>
+                </a>
+                <a href="https://youtube.com" class="shortcut-card" title="YouTube">
+                    <div class="shortcut-icon">📺</div>
+                    <span>YouTube</span>
+                </a>
+                <a href="https://github.com" class="shortcut-card" title="GitHub">
+                    <div class="shortcut-icon">💻</div>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://reddit.com" class="shortcut-card" title="Reddit">
+                    <div class="shortcut-icon">🔗</div>
+                    <span>Reddit</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Panneau de contrôle flottant -->
+        <div class="floating-control-panel">
+            <button id="toggle-settings-btn" class="control-btn settings-btn" title="Paramètres">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="1.5"></circle>
+                    <circle cx="19" cy="12" r="1.5"></circle>
+                    <circle cx="5" cy="12" r="1.5"></circle>
+                </svg>
+            </button>
+            <button id="sound-toggle-btn" class="control-btn sound-btn" title="Activer/Désactiver les sons">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.26 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal des paramètres -->
+        <div id="settings-modal" class="settings-modal hidden">
+            <div class="settings-panel">
+                <div class="settings-header">
+                    <h2>Paramètres AuraTab</h2>
+                    <button id="close-settings-btn" class="close-btn">&times;</button>
+                </div>
+
+                <div class="settings-content">
+                    <!-- Section Fond d'écran -->
+                    <div class="settings-section">
+                        <h3>🎨 Fond d'écran</h3>
+                        
+                        <div class="wallpaper-preview">
+                            <div id="preview-wallpaper" class="preview-box"></div>
+                        </div>
+
+                        <div class="wallpaper-actions">
+                            <button id="upload-wallpaper-btn" class="action-btn primary-btn">
+                                📤 Charger un fond
+                            </button>
+                            <button id="remove-wallpaper-btn" class="action-btn danger-btn">
+                                🗑️ Supprimer le fond
+                            </button>
+                            <input 
+                                type="file" 
+                                id="wallpaper-input" 
+                                accept="image/png,image/jpeg,image/gif"
+                                style="display: none;"
+                            >
+                        </div>
+
+                        <div class="wallpaper-info">
+                            <p id="wallpaper-info-text">Aucun fond personnalisé</p>
+                        </div>
+                    </div>
+
+                    <!-- Section Effets sonores -->
+                    <div class="settings-section">
+                        <h3>🔊 Effets sonores</h3>
+                        
+                        <div class="sound-controls">
+                            <label class="sound-toggle">
+                                <input 
+                                    type="checkbox" 
+                                    id="sound-tab-open" 
+                                    class="sound-checkbox"
+                                    checked
+                                >
+                                <span class="toggle-slider"></span>
+                                <span class="sound-label">Ouverture d'onglet</span>
+                            </label>
+
+                            <label class="sound-toggle">
+                                <input 
+                                    type="checkbox" 
+                                    id="sound-tab-close" 
+                                    class="sound-checkbox"
+                                    checked
+                                >
+                                <span class="toggle-slider"></span>
+                                <span class="sound-label">Fermeture d'onglet</span>
+                            </label>
+
+                            <label class="sound-toggle">
+                                <input 
+                                    type="checkbox" 
+                                    id="sound-page-reload" 
+                                    class="sound-checkbox"
+                                    checked
+                                >
+                                <span class="toggle-slider"></span>
+                                <span class="sound-label">Rechargement de page</span>
+                            </label>
+
+                            <label class="sound-toggle">
+                                <input 
+                                    type="checkbox" 
+                                    id="sound-master" 
+                                    class="sound-checkbox"
+                                    checked
+                                >
+                                <span class="toggle-slider"></span>
+                                <span class="sound-label">Tous les sons</span>
+                            </label>
+                        </div>
+
+                        <div class="volume-control">
+                            <label for="volume-slider">Volume:</label>
+                            <input 
+                                type="range" 
+                                id="volume-slider" 
+                                class="volume-slider"
+                                min="0" 
+                                max="100" 
+                                value="70"
+                            >
+                            <span id="volume-value" class="volume-value">70%</span>
+                        </div>
+
+                        <!-- Sons personnalisés -->
+                        <div class="custom-sounds-section">
+                            <h4>🎵 Sons personnalisés</h4>
+                            <p class="custom-sounds-info">Téléchargez vos propres sons (MP3, WAV, OGG, M4A)</p>
+
+                            <div class="custom-sound-item">
+                                <div class="custom-sound-header">
+                                    <span class="sound-name">📂 Son ouverture onglet</span>
+                                    <span id="tab-open-status" class="sound-status">Par défaut</span>
+                                </div>
+                                <button id="upload-sound-tab-open-btn" class="action-btn primary-btn upload-btn">📤 Charger un son</button>
+                                <button id="reset-sound-tab-open-btn" class="action-btn danger-btn reset-btn">🔄 Réinitialiser</button>
+                                <input type="file" id="sound-tab-open-input" accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4" style="display: none;">
+                            </div>
+
+                            <div class="custom-sound-item">
+                                <div class="custom-sound-header">
+                                    <span class="sound-name">📂 Son fermeture onglet</span>
+                                    <span id="tab-close-status" class="sound-status">Par défaut</span>
+                                </div>
+                                <button id="upload-sound-tab-close-btn" class="action-btn primary-btn upload-btn">📤 Charger un son</button>
+                                <button id="reset-sound-tab-close-btn" class="action-btn danger-btn reset-btn">🔄 Réinitialiser</button>
+                                <input type="file" id="sound-tab-close-input" accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4" style="display: none;">
+                            </div>
+
+                            <div class="custom-sound-item">
+                                <div class="custom-sound-header">
+                                    <span class="sound-name">📂 Son rechargement page</span>
+                                    <span id="page-reload-status" class="sound-status">Par défaut</span>
+                                </div>
+                                <button id="upload-sound-page-reload-btn" class="action-btn primary-btn upload-btn">📤 Charger un son</button>
+                                <button id="reset-sound-page-reload-btn" class="action-btn danger-btn reset-btn">🔄 Réinitialiser</button>
+                                <input type="file" id="sound-page-reload-input" accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4" style="display: none;">
+                            </div>
+
+                            <div class="sound-preview-controls">
+                                <button id="test-sounds-btn" class="action-btn secondary-btn">🔉 Tester les sons</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section Interface -->
+                    <div class="settings-section">
+                        <h3>⚙️ Interface</h3>
+                        
+                        <label class="option-toggle">
+                            <input 
+                                type="checkbox" 
+                                id="show-shortcuts" 
+                                class="checkbox"
+                                checked
+                            >
+                            <span>Afficher les raccourcis</span>
+                        </label>
+
+                        <label class="option-toggle">
+                            <input 
+                                type="checkbox" 
+                                id="show-weather" 
+                                class="checkbox"
+                                checked
+                            >
+                            <span>Afficher la météo</span>
+                        </label>
+
+                        <label class="option-toggle">
+                            <input 
+                                type="checkbox" 
+                                id="show-time" 
+                                class="checkbox"
+                                checked
+                            >
+                            <span>Afficher l'horloge</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-footer">
+                    <p class="version">AuraTab v1.0.0</p>
+                    <button id="save-settings-btn" class="save-btn">💾 Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio element pour les effets sonores -->
+    <audio id="sound-player" crossorigin="anonymous"></audio>
+
+    <script src="newtab.js"></script>
+</body>
+</html>
