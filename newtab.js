@@ -14,7 +14,8 @@ class AuraTabManager {
             showWeather: true,
             showTime: true,
             wallpaper: null,
-            shortcuts: []
+            shortcuts: [],
+            searchEngine: 'google'
         };
 
         this.editingShortcutIndex = null;
@@ -154,13 +155,38 @@ class AuraTabManager {
         });
 
         // Barre de recherche
-        document.getElementById('search-input').addEventListener('keypress', (e) => {
+        const searchInput = document.getElementById('search-input');
+        
+        searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 const query = e.target.value;
                 if (query.trim()) {
-                    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                    this.performSearch(query);
+                    this.hideSuggestions();
                 }
             }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value;
+            if (query.trim()) {
+                this.fetchSuggestions(query);
+            } else {
+                this.hideSuggestions();
+            }
+        });
+
+        // Fermer les suggestions quand on clique ailleurs
+        document.addEventListener('click', (e) => {
+            if (e.target !== searchInput && !e.target.closest('.search-suggestions')) {
+                this.hideSuggestions();
+            }
+        });
+
+        // Moteur de recherche
+        document.getElementById('search-engine').addEventListener('change', (e) => {
+            this.settings.searchEngine = e.target.value;
+            this.saveSettings();
         });
 
         // Bouton Ajouter raccourci (depuis la page)
@@ -175,6 +201,11 @@ class AuraTabManager {
 
         // Bouton Annuler du modal raccourci
         document.getElementById('cancel-shortcut-btn').addEventListener('click', () => {
+            this.closeShortcutModal();
+        });
+
+        // Bouton Fermer du modal raccourci
+        document.getElementById('close-shortcut-modal-btn').addEventListener('click', () => {
             this.closeShortcutModal();
         });
 
@@ -221,6 +252,92 @@ class AuraTabManager {
         this.saveSettings();
     }
 
+    /**
+     * Effectuer une recherche avec le moteur sélectionné
+     */
+    performSearch(query) {
+        const searchEngines = {
+            google: 'https://www.google.com/search?q=',
+            brave: 'https://search.brave.com/search?q=',
+            duckduckgo: 'https://duckduckgo.com/?q=',
+            ecosia: 'https://www.ecosia.org/search?q=',
+            bing: 'https://www.bing.com/search?q='
+        };
+
+        const baseUrl = searchEngines[this.settings.searchEngine] || searchEngines.google;
+        window.location.href = baseUrl + encodeURIComponent(query);
+    }
+
+    /**
+     * Récupérer les suggestions de recherche
+     */
+    async fetchSuggestions(query) {
+        try {
+            const suggestions = await this.getSearchSuggestions(query);
+            this.displaySuggestions(suggestions, query);
+        } catch (error) {
+            console.error('Erreur suggestions:', error);
+        }
+    }
+
+    /**
+     * Obtenir les suggestions via l'API
+     */
+    async getSearchSuggestions(query) {
+        try {
+            // API de suggestions Google
+            const response = await fetch(`https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            return data[1] || [];
+        } catch (error) {
+            console.error('Erreur API:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Afficher les suggestions
+     */
+    displaySuggestions(suggestions, query) {
+        const suggestionsContainer = document.getElementById('search-suggestions');
+        
+        if (suggestions.length === 0) {
+            this.hideSuggestions();
+            return;
+        }
+
+        suggestionsContainer.innerHTML = '';
+        
+        suggestions.slice(0, 8).forEach(suggestion => {
+            const item = document.createElement('div');
+            item.className = 'search-suggestion-item';
+            item.innerHTML = `
+                <svg class="search-suggestion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <span class="search-suggestion-text">${suggestion}</span>
+            `;
+            
+            item.addEventListener('click', () => {
+                document.getElementById('search-input').value = suggestion;
+                this.performSearch(suggestion);
+            });
+            
+            suggestionsContainer.appendChild(item);
+        });
+        
+        suggestionsContainer.classList.remove('hidden');
+    }
+
+    /**
+     * Cacher les suggestions
+     */
+    hideSuggestions() {
+        const suggestionsContainer = document.getElementById('search-suggestions');
+        suggestionsContainer.classList.add('hidden');
+        suggestionsContainer.innerHTML = '';
+    }
 
     /**
      * Gérer l'upload du fond d'écran
@@ -504,6 +621,7 @@ class AuraTabManager {
         document.getElementById('show-shortcuts').checked = this.settings.showShortcuts;
         document.getElementById('show-weather').checked = this.settings.showWeather;
         document.getElementById('show-time').checked = this.settings.showTime;
+        document.getElementById('search-engine').value = this.settings.searchEngine;
 
         // Mettre à jour l'aperçu du fond
         if (this.settings.wallpaper) {

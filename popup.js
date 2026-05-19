@@ -71,13 +71,6 @@ class PopupManager {
             chrome.tabs.create({ url: 'newtab.html' });
         });
 
-        // Volume
-        document.getElementById('popup-volume-slider').addEventListener('change', (e) => {
-            this.settings.volume = parseInt(e.target.value);
-            document.getElementById('popup-volume-text').textContent = this.settings.volume + '%';
-            this.saveSettings();
-        });
-
         // Fond d'écran
         document.getElementById('change-wallpaper-btn').addEventListener('click', () => {
             document.getElementById('popup-wallpaper-input').click();
@@ -126,10 +119,6 @@ class PopupManager {
      * Mettre à jour l'interface
      */
     updateUI() {
-        // Volume
-        document.getElementById('popup-volume-slider').value = this.settings.volume;
-        document.getElementById('popup-volume-text').textContent = this.settings.volume + '%';
-
         // Aperçu du fond
         const preview = document.getElementById('popup-wallpaper-preview');
         if (this.settings.wallpaper) {
