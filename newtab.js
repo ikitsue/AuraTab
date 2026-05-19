@@ -93,96 +93,137 @@ class AuraTabManager {
      * Configuration des écouteurs d'événements
      */
     setupEventListeners() {
-        // Bouton Paramètres (page dédiée)
+        // Bouton Paramètres (page dédiée) - Header
         const settingsHeaderBtn = document.getElementById('settings-btn-header');
         if (settingsHeaderBtn) {
             settingsHeaderBtn.addEventListener('click', () => {
-                window.location.href = chrome.runtime.getURL('settings.html');
+                window.location.href = 'settings.html';
+            });
+        }
+
+        // Bouton Paramètres (Configuration rapide)
+        const settingsBtn = document.getElementById('settings-btn');
+        if (settingsBtn) {
+            settingsBtn.addEventListener('click', () => {
+                window.location.href = 'settings.html';
             });
         }
 
         // Bouton Paramètres
-        document.getElementById('toggle-settings-btn').addEventListener('click', () => {
-            this.toggleSettings();
-        });
+        const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
+        if (toggleSettingsBtn) {
+            toggleSettingsBtn.addEventListener('click', () => {
+                this.toggleSettings();
+            });
+        }
 
         // Bouton Fermer paramètres
-        document.getElementById('close-settings-btn').addEventListener('click', () => {
-            this.toggleSettings(false);
-        });
+        const closeSettingsBtn = document.getElementById('close-settings-btn');
+        if (closeSettingsBtn) {
+            closeSettingsBtn.addEventListener('click', () => {
+                this.toggleSettings(false);
+            });
+        }
 
         // Bouton son master
-        document.getElementById('sound-toggle-btn').addEventListener('click', () => {
-            this.toggleMasterSound();
-        });
+        const soundToggleBtn = document.getElementById('sound-toggle-btn');
+        if (soundToggleBtn) {
+            soundToggleBtn.addEventListener('click', () => {
+                this.toggleMasterSound();
+            });
+        }
 
         // Fermer les paramètres en cliquant en dehors
-        document.getElementById('settings-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'settings-modal') {
-                this.toggleSettings(false);
-            }
-        });
+        const settingsModal = document.getElementById('settings-modal');
+        if (settingsModal) {
+            settingsModal.addEventListener('click', (e) => {
+                if (e.target.id === 'settings-modal') {
+                    this.toggleSettings(false);
+                }
+            });
+        }
 
         // Upload du fond d'écran
-        document.getElementById('upload-wallpaper-btn').addEventListener('click', () => {
-            document.getElementById('wallpaper-input').click();
-        });
+        const uploadBtn = document.getElementById('upload-wallpaper-btn');
+        if (uploadBtn) {
+            uploadBtn.addEventListener('click', () => {
+                document.getElementById('wallpaper-input').click();
+            });
+        }
 
-        document.getElementById('wallpaper-input').addEventListener('change', (e) => {
-            this.handleWallpaperUpload(e);
-        });
+        const wallpaperInput = document.getElementById('wallpaper-input');
+        if (wallpaperInput) {
+            wallpaperInput.addEventListener('change', (e) => {
+                this.handleWallpaperUpload(e);
+            });
+        }
 
         // Supprimer le fond
-        document.getElementById('remove-wallpaper-btn').addEventListener('click', () => {
-            this.removeWallpaper();
-        });
+        const removeWallpaperBtn = document.getElementById('remove-wallpaper-btn');
+        if (removeWallpaperBtn) {
+            removeWallpaperBtn.addEventListener('click', () => {
+                this.removeWallpaper();
+            });
+        }
 
         // Options d'interface
-        document.getElementById('show-shortcuts').addEventListener('change', (e) => {
-            this.settings.showShortcuts = e.target.checked;
-            this.updateUI();
-            this.saveSettings();
-        });
+        const showShortcuts = document.getElementById('show-shortcuts');
+        if (showShortcuts) {
+            showShortcuts.addEventListener('change', (e) => {
+                this.settings.showShortcuts = e.target.checked;
+                this.updateUI();
+                this.saveSettings();
+            });
+        }
 
-        document.getElementById('show-weather').addEventListener('change', (e) => {
-            this.settings.showWeather = e.target.checked;
-            this.updateUI();
-            this.saveSettings();
-        });
+        const showWeather = document.getElementById('show-weather');
+        if (showWeather) {
+            showWeather.addEventListener('change', (e) => {
+                this.settings.showWeather = e.target.checked;
+                this.updateUI();
+                this.saveSettings();
+            });
+        }
 
-        document.getElementById('show-time').addEventListener('change', (e) => {
-            this.settings.showTime = e.target.checked;
-            this.updateUI();
-            this.saveSettings();
-        });
+        const showTime = document.getElementById('show-time');
+        if (showTime) {
+            showTime.addEventListener('change', (e) => {
+                this.settings.showTime = e.target.checked;
+                this.updateUI();
+                this.saveSettings();
+            });
+        }
 
         // Bouton Enregistrer
-        document.getElementById('save-settings-btn').addEventListener('click', () => {
-            this.toggleSettings(false);
-            this.showNotification('✅ Paramètres enregistrés!');
-        });
+        const saveSettingsBtn = document.getElementById('save-settings-btn');
+        if (saveSettingsBtn) {
+            saveSettingsBtn.addEventListener('click', () => {
+                this.toggleSettings(false);
+                this.showNotification('✅ Paramètres enregistrés!');
+            });
+        }
 
         // Barre de recherche
         const searchInput = document.getElementById('search-input');
-        
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+        if (searchInput) {
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = e.target.value;
+                    if (query.trim()) {
+                        this.performSearch(query);
+                    }
+                }
+            });
+
+            searchInput.addEventListener('input', (e) => {
                 const query = e.target.value;
                 if (query.trim()) {
-                    this.performSearch(query);
+                    this.fetchSuggestions(query);
+                } else {
                     this.hideSuggestions();
                 }
-            }
-        });
-
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value;
-            if (query.trim()) {
-                this.fetchSuggestions(query);
-            } else {
-                this.hideSuggestions();
-            }
-        });
+            });
+        }
 
         // Fermer les suggestions quand on clique ailleurs
         document.addEventListener('click', (e) => {
@@ -192,42 +233,63 @@ class AuraTabManager {
         });
 
         // Moteur de recherche
-        document.getElementById('search-engine').addEventListener('change', (e) => {
-            this.settings.searchEngine = e.target.value;
-            this.saveSettings();
-        });
+        const searchEngine = document.getElementById('search-engine');
+        if (searchEngine) {
+            searchEngine.addEventListener('change', (e) => {
+                this.settings.searchEngine = e.target.value;
+                this.saveSettings();
+            });
+        }
 
         // Bouton Ajouter raccourci (depuis la page)
-        document.getElementById('add-shortcut-btn').addEventListener('click', () => {
-            this.openShortcutModal();
-        });
+        const addShortcutBtn = document.getElementById('add-shortcut-btn');
+        if (addShortcutBtn) {
+            addShortcutBtn.addEventListener('click', () => {
+                this.openShortcutModal();
+            });
+        }
 
         // Bouton Ajouter raccourci (depuis les paramètres)
-        document.getElementById('add-shortcut-settings-btn').addEventListener('click', () => {
-            this.openShortcutModal();
-        });
+        const addShortcutSettingsBtn = document.getElementById('add-shortcut-settings-btn');
+        if (addShortcutSettingsBtn) {
+            addShortcutSettingsBtn.addEventListener('click', () => {
+                this.openShortcutModal();
+            });
+        }
 
         // Bouton Annuler du modal raccourci
-        document.getElementById('cancel-shortcut-btn').addEventListener('click', () => {
-            this.closeShortcutModal();
-        });
+        const cancelShortcutBtn = document.getElementById('cancel-shortcut-btn');
+        if (cancelShortcutBtn) {
+            cancelShortcutBtn.addEventListener('click', () => {
+                this.closeShortcutModal();
+            });
+        }
 
         // Bouton Fermer du modal raccourci
-        document.getElementById('close-shortcut-modal-btn').addEventListener('click', () => {
-            this.closeShortcutModal();
-        });
+        const closeShortcutModalBtn = document.getElementById('close-shortcut-modal-btn');
+        if (closeShortcutModalBtn) {
+            closeShortcutModalBtn.addEventListener('click', () => {
+                this.closeShortcutModal();
+            });
+        }
 
         // Bouton Enregistrer du modal raccourci
-        document.getElementById('save-shortcut-btn').addEventListener('click', () => {
-            this.saveShortcut();
-        });
+        const saveShortcutBtn = document.getElementById('save-shortcut-btn');
+        if (saveShortcutBtn) {
+            saveShortcutBtn.addEventListener('click', () => {
+                this.saveShortcut();
+            });
+        }
 
         // Fermer le modal en cliquant en dehors
-        document.getElementById('shortcut-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'shortcut-modal') {
-                this.closeShortcutModal();
-            }
-        });
+        const shortcutModal = document.getElementById('shortcut-modal');
+        if (shortcutModal) {
+            shortcutModal.addEventListener('click', (e) => {
+                if (e.target.id === 'shortcut-modal') {
+                    this.closeShortcutModal();
+                }
+            });
+        }
     }
 
     /**

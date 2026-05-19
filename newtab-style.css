@@ -780,11 +780,9 @@ body {
     border-radius: 2px;
     background: rgba(0, 217, 255, 0.2);
     outline: none;
-    -webkit-appearance: none;
 }
 
 .volume-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
     appearance: none;
     width: 16px;
     height: 16px;
