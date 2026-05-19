@@ -10,31 +10,11 @@ class AuraTabManager {
 
         this.settings = {
             volume: 70,
-            soundEnabled: true,
-            soundTabOpen: true,
-            soundTabClose: true,
-            soundPageReload: false,
             showShortcuts: true,
             showWeather: true,
             showTime: true,
-            wallpaper: null,
-            customSoundTabOpen: null,
-            customSoundTabClose: null,
-            customSoundPageReload: null
+            wallpaper: null
         };
-        
-        this.soundSpamProtection = {
-            tabOpen: 0,
-            tabClose: 0,
-            pageReload: 0,
-            cooldown: 500 // ms minimum entre deux sons
-        };
-        
-        // Vérifier que l'élément audio existe
-        this.audioPlayer = document.getElementById('sound-player');
-        if (!this.audioPlayer) {
-            console.warn('⚠️ Élément audio-player non trouvé');
-        }
         
         this.init();
     }
@@ -142,71 +122,6 @@ class AuraTabManager {
             this.removeWallpaper();
         });
 
-        // Upload sons personnalisés
-        document.getElementById('upload-sound-tab-open-btn').addEventListener('click', () => {
-            document.getElementById('sound-tab-open-input').click();
-        });
-
-        document.getElementById('upload-sound-tab-close-btn').addEventListener('click', () => {
-            document.getElementById('sound-tab-close-input').click();
-        });
-
-        document.getElementById('upload-sound-page-reload-btn').addEventListener('click', () => {
-            document.getElementById('sound-page-reload-input').click();
-        });
-
-        document.getElementById('sound-tab-open-input').addEventListener('change', (e) => {
-            this.handleCustomSoundUpload(e, 'customSoundTabOpen', 'tab-open');
-        });
-
-        document.getElementById('sound-tab-close-input').addEventListener('change', (e) => {
-            this.handleCustomSoundUpload(e, 'customSoundTabClose', 'tab-close');
-        });
-
-        document.getElementById('sound-page-reload-input').addEventListener('change', (e) => {
-            this.handleCustomSoundUpload(e, 'customSoundPageReload', 'page-reload');
-        });
-
-        // Réinitialiser sons
-        document.getElementById('reset-sound-tab-open-btn').addEventListener('click', () => {
-            this.resetCustomSound('customSoundTabOpen', 'tab-open');
-        });
-
-        document.getElementById('reset-sound-tab-close-btn').addEventListener('click', () => {
-            this.resetCustomSound('customSoundTabClose', 'tab-close');
-        });
-
-        document.getElementById('reset-sound-page-reload-btn').addEventListener('click', () => {
-            this.resetCustomSound('customSoundPageReload', 'page-reload');
-        });
-
-        // Tester les sons
-        document.getElementById('test-sounds-btn').addEventListener('click', () => {
-            this.testAllSounds();
-        });
-
-        // Contrôles sonores
-        document.getElementById('sound-tab-open').addEventListener('change', (e) => {
-            this.settings.soundTabOpen = e.target.checked;
-            this.saveSettings();
-        });
-
-        document.getElementById('sound-tab-close').addEventListener('change', (e) => {
-            this.settings.soundTabClose = e.target.checked;
-            this.saveSettings();
-        });
-
-        document.getElementById('sound-page-reload').addEventListener('change', (e) => {
-            this.settings.soundPageReload = e.target.checked;
-            this.saveSettings();
-        });
-
-        document.getElementById('sound-master').addEventListener('change', (e) => {
-            this.settings.soundEnabled = e.target.checked;
-            this.updateSoundButtonState();
-            this.saveSettings();
-        });
-
         // Volume
         document.getElementById('volume-slider').addEventListener('change', (e) => {
             this.settings.volume = parseInt(e.target.value);
@@ -274,10 +189,6 @@ class AuraTabManager {
      * Mettre à jour l'interface des paramètres
      */
     updateSettingsUI() {
-        document.getElementById('sound-tab-open').checked = this.settings.soundTabOpen;
-        document.getElementById('sound-tab-close').checked = this.settings.soundTabClose;
-        document.getElementById('sound-page-reload').checked = this.settings.soundPageReload;
-        document.getElementById('sound-master').checked = this.settings.soundEnabled;
         document.getElementById('volume-slider').value = this.settings.volume;
         document.getElementById('volume-value').textContent = this.settings.volume + '%';
         document.getElementById('show-shortcuts').checked = this.settings.showShortcuts;
@@ -290,50 +201,15 @@ class AuraTabManager {
             previewBox.style.backgroundImage = `url(${this.settings.wallpaper})`;
             document.getElementById('wallpaper-info-text').textContent = '✅ Fond personnalisé chargé';
         }
-
-        // Mettre à jour les statuts des sons
-        this.updateSoundStatus('tab-open', this.settings.customSoundTabOpen);
-        this.updateSoundStatus('tab-close', this.settings.customSoundTabClose);
-        this.updateSoundStatus('page-reload', this.settings.customSoundPageReload);
-    }
-
-    /**
-     * Mettre à jour le statut d'un son personnalisé
-     */
-    updateSoundStatus(soundType, customSound) {
-        const statusElement = document.getElementById(`${soundType}-status`);
-        if (!statusElement) return;
-
-        if (customSound) {
-            statusElement.textContent = '✅ Personnalisé';
-            statusElement.classList.add('custom');
-        } else {
-            statusElement.textContent = 'Par défaut';
-            statusElement.classList.remove('custom');
-        }
     }
 
     /**
      * Basculer le son master
      */
     toggleMasterSound() {
-        this.settings.soundEnabled = !this.settings.soundEnabled;
-        document.getElementById('sound-master').checked = this.settings.soundEnabled;
-        this.updateSoundButtonState();
         this.saveSettings();
     }
 
-    /**
-     * Mettre à jour l'état du bouton son
-     */
-    updateSoundButtonState() {
-        const btn = document.getElementById('sound-toggle-btn');
-        if (this.settings.soundEnabled) {
-            btn.classList.remove('muted');
-        } else {
-            btn.classList.add('muted');
-        }
-    }
 
     /**
      * Gérer l'upload du fond d'écran
@@ -398,76 +274,6 @@ class AuraTabManager {
     }
 
     /**
-     * Gérer l'upload d'un son personnalisé
-     */
-    async handleCustomSoundUpload(event, settingKey, soundType) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        // Vérifier le type de fichier audio
-        const validTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4', 'audio/x-m4a'];
-        if (!validTypes.includes(file.type)) {
-            this.showNotification('❌ Format non supporté. Utilisez MP3, WAV, OGG ou M4A.');
-            return;
-        }
-
-        // Vérifier la taille (max 2MB par son)
-        if (file.size > 2 * 1024 * 1024) {
-            this.showNotification('❌ Le fichier est trop volumineux (max 2MB).');
-            return;
-        }
-
-        try {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                this.settings[settingKey] = e.target.result;
-                await this.saveSettings();
-                this.updateSettingsUI();
-                this.showNotification(`✅ Son ${soundType} personnalisé!`);
-            };
-            reader.readAsDataURL(file);
-        } catch (error) {
-            console.error('Erreur lors de l\'upload du son:', error);
-            this.showNotification('❌ Erreur lors du chargement du son');
-        }
-    }
-
-    /**
-     * Réinitialiser un son personnalisé
-     */
-    async resetCustomSound(settingKey, soundType) {
-        this.settings[settingKey] = null;
-        await this.saveSettings();
-        this.updateSettingsUI();
-        this.showNotification(`🔄 Son ${soundType} réinitialisé`);
-    }
-
-    /**
-     * Tester tous les sons
-     */
-    testAllSounds() {
-        this.showNotification('🔊 Test des sons...');
-        
-        setTimeout(() => {
-            if (this.settings.soundTabOpen && this.settings.soundEnabled) {
-                this.playSound('tab-open');
-            }
-        }, 200);
-
-        setTimeout(() => {
-            if (this.settings.soundTabClose && this.settings.soundEnabled) {
-                this.playSound('tab-close');
-            }
-        }, 800);
-
-        setTimeout(() => {
-            if (this.settings.soundPageReload && this.settings.soundEnabled) {
-                this.playSound('page-reload');
-            }
-        }, 1400);
-    }
-
-    /**
      * Mettre à jour l'interface selon les paramètres
      */
     updateUI() {
@@ -499,72 +305,6 @@ class AuraTabManager {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         const dateStr = now.toLocaleDateString('fr-FR', options);
         document.getElementById('date').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-    }
-
-    /**
-     * Jouer un son avec protection anti-spam
-     */
-    async playSound(soundType) {
-        // Vérifier si les sons sont activés
-        if (!this.settings.soundEnabled) return;
-
-        // Vérifier le type de son
-        const soundSettings = {
-            'tab-open': this.settings.soundTabOpen,
-            'tab-close': this.settings.soundTabClose,
-            'page-reload': this.settings.soundPageReload
-        };
-
-        if (!soundSettings[soundType]) return;
-
-        // Protection anti-spam
-        const now = Date.now();
-        const lastPlayTime = this.soundSpamProtection[soundType.replace('-', '')] || 0;
-        
-        if (now - lastPlayTime < this.soundSpamProtection.cooldown) {
-            return;
-        }
-
-        this.soundSpamProtection[soundType.replace('-', '')] = now;
-
-        try {
-            let soundUrl;
-            
-            // Vérifier si un son personnalisé existe
-            const customSoundKey = {
-                'tab-open': 'customSoundTabOpen',
-                'tab-close': 'customSoundTabClose',
-                'page-reload': 'customSoundPageReload'
-            }[soundType];
-
-            if (this.settings[customSoundKey]) {
-                // Utiliser le son personnalisé
-                soundUrl = this.settings[customSoundKey];
-            } else {
-                // Utiliser le son par défaut
-                soundUrl = chrome.runtime.getURL(`sounds/${soundType}.wav`);
-            }
-            
-            // Configurer l'audio
-            if (this.audioPlayer) {
-                this.audioPlayer.src = soundUrl;
-                this.audioPlayer.volume = this.settings.volume / 100;
-                
-                // Jouer le son
-                const playPromise = this.audioPlayer.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        // Autoplay peut être bloqué
-                        console.warn('Son bloqué (autoplay):', error);
-                    });
-                }
-            } else {
-                console.warn('Audio player non disponible');
-            }
-        } catch (error) {
-            console.error('Erreur lors de la lecture du son:', error);
-        }
     }
 
     /**
@@ -614,66 +354,6 @@ class AuraTabManager {
         });
     }
 }
-
-// Écouter les messages du background pour jouer les sons
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'playSoundFromBackground') {
-        // Jouer le son demandé par le background
-        const soundFile = request.soundFile;
-        const soundUrl = chrome.runtime.getURL(`sounds/${soundFile}`);
-        
-        try {
-            // Vérifier si c'est une Data URL (son personnalisé) ou une URL d'extension
-            if (soundUrl.startsWith('data:')) {
-                // C'est une Data URL, on peut la jouer directement
-                const audio = new Audio(soundUrl);
-                if (window.appManager && window.appManager.settings) {
-                    audio.volume = window.appManager.settings.volume / 100;
-                } else {
-                    audio.volume = 0.7;
-                }
-                audio.play().then(() => {
-                    console.log('🔊 Son joué (personnalisé):', soundFile);
-                }).catch(error => {
-                    console.warn('⚠️ Erreur lecture son:', error);
-                });
-            } else {
-                // C'est une URL d'extension, utiliser fetch
-                fetch(soundUrl)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        // Créer une URL blob
-                        const blobUrl = URL.createObjectURL(blob);
-                        
-                        // Créer un nouvel Audio element avec l'URL blob
-                        const audio = new Audio(blobUrl);
-                        
-                        // Utiliser les paramètres globaux si possible
-                        if (window.appManager && window.appManager.settings) {
-                            audio.volume = window.appManager.settings.volume / 100;
-                        } else {
-                            audio.volume = 0.7;
-                        }
-                        
-                        // Jouer le son
-                        audio.play().then(() => {
-                            console.log('🔊 Son joué (par défaut):', soundFile);
-                            // Nettoyer après 5 secondes
-                            setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
-                        }).catch(error => {
-                            console.warn('⚠️ Erreur lecture son:', error);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('❌ Erreur chargement du fichier audio:', error);
-                    });
-            }
-        } catch (error) {
-            console.error('❌ Erreur lors de la lecture du son:', error);
-        }
-        sendResponse({ success: true });
-    }
-});
 
 // Initialiser l'application au chargement du DOM
 if (document.readyState === 'loading') {

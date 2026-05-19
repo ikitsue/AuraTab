@@ -7,10 +7,6 @@ class PopupManager {
     constructor() {
         this.settings = {
             volume: 70,
-            soundEnabled: true,
-            soundTabOpen: true,
-            soundTabClose: true,
-            soundPageReload: true,
             wallpaper: null
         };
         
@@ -75,27 +71,6 @@ class PopupManager {
             chrome.tabs.create({ url: 'newtab.html' });
         });
 
-        // Bouton état du son
-        document.getElementById('sound-status-btn').addEventListener('click', () => {
-            this.toggleSound();
-        });
-
-        // Toggles son
-        document.getElementById('tab-open-toggle').addEventListener('change', (e) => {
-            this.settings.soundTabOpen = e.target.checked;
-            this.saveSettings();
-        });
-
-        document.getElementById('tab-close-toggle').addEventListener('change', (e) => {
-            this.settings.soundTabClose = e.target.checked;
-            this.saveSettings();
-        });
-
-        document.getElementById('page-reload-toggle').addEventListener('change', (e) => {
-            this.settings.soundPageReload = e.target.checked;
-            this.saveSettings();
-        });
-
         // Volume
         document.getElementById('popup-volume-slider').addEventListener('change', (e) => {
             this.settings.volume = parseInt(e.target.value);
@@ -110,38 +85,6 @@ class PopupManager {
 
         document.getElementById('popup-wallpaper-input').addEventListener('change', (e) => {
             this.handleWallpaperUpload(e);
-        });
-
-        // Tester les sons
-        if (document.getElementById('test-sounds-popup-btn')) {
-            document.getElementById('test-sounds-popup-btn').addEventListener('click', () => {
-                this.testSounds();
-            });
-        }
-
-        // Liens footer
-        document.getElementById('feedback-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            // Ouvrir un lien vers feedback
-        });
-
-        document.getElementById('help-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            // Ouvrir un lien vers aide
-        });
-    }
-
-    /**
-     * Basculer le son
-     */
-    toggleSound() {
-        this.settings.soundEnabled = !this.settings.soundEnabled;
-        this.updateUI();
-        this.saveSettings();
-        
-        // Envoyer un message au background
-        chrome.runtime.sendMessage({
-            action: 'toggleSound'
         });
     }
 
@@ -180,42 +123,9 @@ class PopupManager {
     }
 
     /**
-     * Tester les sons
-     */
-    testSounds() {
-        // Envoyer un message au background pour tester les sons
-        chrome.runtime.sendMessage({
-            action: 'testSounds'
-        }, (response) => {
-            if (response && response.success) {
-                alert('🔊 Test des sons en cours...');
-            } else {
-                alert('❌ Les sons ne peuvent pas être testés');
-            }
-        });
-    }
-
-    /**
      * Mettre à jour l'interface
      */
     updateUI() {
-        // État du son
-        const soundBtn = document.getElementById('sound-status-btn');
-        if (this.settings.soundEnabled) {
-            soundBtn.classList.add('active');
-            soundBtn.classList.remove('inactive');
-            soundBtn.innerHTML = '<span class="status-dot"></span>Activé';
-        } else {
-            soundBtn.classList.remove('active');
-            soundBtn.classList.add('inactive');
-            soundBtn.innerHTML = '<span class="status-dot"></span>Désactivé';
-        }
-
-        // Toggles son
-        document.getElementById('tab-open-toggle').checked = this.settings.soundTabOpen;
-        document.getElementById('tab-close-toggle').checked = this.settings.soundTabClose;
-        document.getElementById('page-reload-toggle').checked = this.settings.soundPageReload;
-
         // Volume
         document.getElementById('popup-volume-slider').value = this.settings.volume;
         document.getElementById('popup-volume-text').textContent = this.settings.volume + '%';

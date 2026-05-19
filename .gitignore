@@ -43,3 +43,7 @@ coverage/
 
 # Développement local
 debug.log
+
+# Dossier d'images optionnel (dossier temporaire)
+images/
+!images/README.md
