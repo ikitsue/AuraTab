@@ -189,23 +189,6 @@ class AuraTabManager {
                 this.closeShortcutModal();
             }
         });
-
-        // Bouton Menu des raccourcis
-        document.getElementById('toggle-shortcuts-menu-btn').addEventListener('click', () => {
-            this.toggleShortcutsMenu();
-        });
-
-        // Bouton Fermer le menu des raccourcis
-        document.getElementById('close-shortcuts-menu-btn').addEventListener('click', () => {
-            this.toggleShortcutsMenu(false);
-        });
-
-        // Fermer le menu en cliquant en dehors
-        document.getElementById('shortcuts-menu').addEventListener('click', (e) => {
-            if (e.target.id === 'shortcuts-menu') {
-                this.toggleShortcutsMenu(false);
-            }
-        });
     }
 
     /**
@@ -511,52 +494,6 @@ class AuraTabManager {
                 const addBtn = document.getElementById('add-shortcut-btn');
                 grid.insertBefore(container, addBtn);
             });
-        }
-
-        // Mettre à jour le menu dépliant
-        this.renderShortcutsMenu();
-    }
-
-    /**
-     * Afficher les raccourcis dans le menu dépliant
-     */
-    renderShortcutsMenu() {
-        const menuList = document.getElementById('shortcuts-menu-list');
-        menuList.innerHTML = '';
-
-        if (!this.settings.shortcuts || this.settings.shortcuts.length === 0) {
-            menuList.innerHTML = '<div class="shortcuts-menu-empty">Aucun raccourci personnalisé</div>';
-            return;
-        }
-
-        this.settings.shortcuts.forEach((shortcut, index) => {
-            const item = document.createElement('a');
-            item.href = shortcut.url;
-            item.className = 'shortcuts-menu-item';
-            item.innerHTML = `
-                <div class="shortcut-icon">${shortcut.icon}</div>
-                <div class="shortcut-name">${shortcut.name}</div>
-            `;
-            menuList.appendChild(item);
-        });
-    }
-
-    /**
-     * Basculer l'affichage du menu des raccourcis
-     */
-    toggleShortcutsMenu(show = null) {
-        const menu = document.getElementById('shortcuts-menu');
-        const isHidden = menu.classList.contains('hidden');
-        
-        if (show === null) {
-            show = isHidden;
-        }
-
-        if (show) {
-            menu.classList.remove('hidden');
-            this.renderShortcutsMenu();
-        } else {
-            menu.classList.add('hidden');
         }
     }
 
