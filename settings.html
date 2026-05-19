@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraTab - Paramètres</title>
+    <link rel="stylesheet" href="newtab-style.css">
+    <link rel="stylesheet" href="settings-style.css">
+</head>
+<body>
+    <!-- Fond d'écran dynamique -->
+    <div id="wallpaper-container" class="wallpaper-container">
+        <div id="wallpaper-display" class="wallpaper-display"></div>
+        <div class="wallpaper-overlay"></div>
+    </div>
+
+    <!-- Conteneur principal des paramètres -->
+    <div class="settings-page-container">
+        <!-- En-tête des paramètres -->
+        <header class="settings-header-page">
+            <div class="settings-title-section">
+                <h1>⚙️ Paramètres AuraTab</h1>
+                <p>Personnalisez votre expérience</p>
+            </div>
+            <a href="newtab.html" class="back-btn" title="Retour">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 11H7.83l5.59-5.59L12 3l-9 9 9 9 1.41-1.41L7.83 13H19v-2z"></path>
+                </svg>
+                Retour
+            </a>
+        </header>
+
+        <!-- Contenu des paramètres -->
+        <main class="settings-content-page">
+            <!-- Section Langue -->
+            <section class="settings-card">
+                <div class="card-header">
+                    <h2>🌐 Langue</h2>
+                </div>
+                <div class="card-content">
+                    <div class="control-group">
+                        <label for="language-select">Choisir la langue</label>
+                        <select id="language-select" class="select-input">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                            <option value="es">Español</option>
+                            <option value="de">Deutsch</option>
+                            <option value="it">Italiano</option>
+                            <option value="pt">Português</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section À propos -->
+            <section class="settings-card">
+                <div class="card-header">
+                    <h2>ℹ️ À propos</h2>
+                </div>
+                <div class="card-content">
+                    <p class="about-text">
+                        <strong>AuraTab v1.0.0</strong><br>
+                        Personnalisez votre nouvel onglet avec des fonds dynamiques et des effets sonores navigateur.
+                    </p>
+                    <p class="credits-text">
+                        Créé avec ❤️ par l'équipe AuraTab
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>

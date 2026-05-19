@@ -1,0 +1,401 @@
+/* ============================================================
+   AuraTab - Settings Page Styles
+   Styles spécifiques pour la page de paramètres
+   ============================================================ */
+
+/* ============================================================
+   Conteneur principal de la page paramètres
+   ============================================================ */
+
+.settings-page-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: var(--spacing-lg);
+}
+
+/* ============================================================
+   En-tête de la page paramètres
+   ============================================================ */
+
+.settings-header-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.settings-title-section h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.settings-title-section p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.back-btn:hover {
+    background: rgba(0, 217, 255, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateX(-4px);
+}
+
+.back-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ============================================================
+   Contenu des paramètres
+   ============================================================ */
+
+.settings-content-page {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   Carte de paramètres
+   ============================================================ */
+
+.settings-card {
+    background: rgba(26, 31, 58, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-normal);
+    animation: slideInUp 0.5s ease forwards;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.settings-card:hover {
+    border-color: var(--primary-color);
+    background: rgba(26, 31, 58, 0.9);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.1);
+}
+
+.card-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.card-header h2 {
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.card-content {
+    padding: var(--spacing-lg);
+}
+
+/* ============================================================
+   Groupes de contrôle
+   ============================================================ */
+
+.control-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.control-group:last-child {
+    margin-bottom: 0;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* ============================================================
+   Slider
+   ============================================================ */
+
+.slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: var(--surface-lighter);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    margin: var(--spacing-sm) 0;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
+    border: 2px solid var(--primary-color);
+    transition: all var(--transition-fast);
+}
+
+.slider::-webkit-slider-thumb:hover {
+    width: 24px;
+    height: 24px;
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
+    border: 2px solid var(--primary-color);
+    transition: all var(--transition-fast);
+}
+
+.slider::-moz-range-thumb:hover {
+    width: 24px;
+    height: 24px;
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.6);
+}
+
+.slider::-moz-range-track {
+    background: transparent;
+    border: none;
+}
+
+.value-display {
+    display: inline-block;
+    background: rgba(0, 217, 255, 0.2);
+    color: var(--primary-color);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-left: var(--spacing-md);
+}
+
+/* ============================================================
+   Groupes de toggle
+   ============================================================ */
+
+.toggle-group {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all var(--transition-normal);
+}
+
+.toggle-group:hover {
+    background: rgba(0, 217, 255, 0.05);
+    border-color: rgba(0, 217, 255, 0.4);
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-label input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.toggle-text {
+    color: var(--text-secondary);
+    font-weight: 600;
+    transition: color var(--transition-normal);
+}
+
+.toggle-label:hover .toggle-text {
+    color: var(--text-primary);
+}
+
+/* ============================================================
+   Select
+   ============================================================ */
+
+.select-input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--surface-darker);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.select-input:hover {
+    border-color: var(--primary-color);
+    background: rgba(0, 217, 255, 0.05);
+}
+
+.select-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+}
+
+/* ============================================================
+   Section À propos
+   ============================================================ */
+
+.about-text {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+}
+
+.about-text strong {
+    color: var(--text-primary);
+}
+
+.credits-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-style: italic;
+    text-align: center;
+}
+
+/* ============================================================
+   Sélecteur de fond d'écran
+   ============================================================ */
+
+.wallpaper-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.wallpaper-selector p {
+    grid-column: 1 / -1;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: var(--spacing-md);
+}
+
+.wallpaper-option {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    background-size: cover;
+    background-position: center;
+}
+
+.wallpaper-option:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+}
+
+.wallpaper-option.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+/* ============================================================
+   Scrollbar personnalisée
+   ============================================================ */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .settings-page-container {
+        padding: var(--spacing-md);
+    }
+
+    .settings-header-page {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        text-align: center;
+    }
+
+    .settings-title-section h1 {
+        font-size: 2rem;
+    }
+
+    .settings-content-page {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+}
