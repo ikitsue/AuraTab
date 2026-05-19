@@ -1,46 +1,47 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuraTab Settings</title>
     <link rel="stylesheet" href="popup-style.css">
+    <script src="i18n.js"></script>
 </head>
 <body>
     <div class="popup-container">
-        <!-- En-tête -->
+        <!-- Header -->
         <div class="popup-header">
-            <h1 class="popup-title">🌟 AuraTab</h1>
-            <div class="popup-subtitle">Configuration rapide</div>
+            <h1 class="popup-title" data-i18n="aura_title">🌟 AuraTab</h1>
+            <div class="popup-subtitle" data-i18n="quick_config">Quick Configuration</div>
         </div>
 
-        <!-- Contenu principal -->
+        <!-- Main content -->
         <div class="popup-content">
-            <!-- Section Actions -->
+            <!-- Actions Section -->
             <div class="popup-section">
                 <button id="settings-btn" class="quick-btn">
                     <span class="btn-icon">⚙️</span>
-                    <span>Paramètres</span>
+                    <span data-i18n="settings_button_popup">Settings</span>
                     <span class="btn-arrow">→</span>
                 </button>
             </div>
 
-            <!-- Section Informations -->
+            <!-- Information Section -->
             <div class="popup-section">
                 <div class="info-box">
                     <div class="info-item">
-                        <span class="info-label">Version:</span>
+                        <span class="info-label" data-i18n="version_label">Version:</span>
                         <span class="info-value">1.0.0</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">Statut:</span>
-                        <span class="info-value status-active">✅ Actif</span>
+                        <span class="info-label" data-i18n="status_label">Status:</span>
+                        <span class="info-value status-active" data-i18n="status_active">✅ Active</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Pied de page -->
+        <!-- Footer -->
         <div class="popup-footer">
         </div>
     </div>

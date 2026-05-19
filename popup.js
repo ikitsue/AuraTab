@@ -1,6 +1,6 @@
 /**
  * AuraTab - Popup Logic
- * Interface de configuration rapide
+ * Quick configuration interface
  */
 
 class PopupManager {
@@ -11,25 +11,28 @@ class PopupManager {
     }
 
     /**
-     * Initialisation
+     * Initialize popup
      */
     async init() {
         try {
-            // Charger les paramètres
+            // Initialize i18n
+            await i18n.init();
+            
+            // Load settings
             await this.loadSettings();
             
-            // Configurer les événements
+            // Setup events
             this.setupEventListeners();
             
-            // Mettre à jour l'interface
+            // Update interface
             this.updateUI();
         } catch (error) {
-            console.error('❌ Erreur popup:', error);
+            console.error('Error popup:', error);
         }
     }
 
     /**
-     * Charger les paramètres
+     * Load settings
      */
     async loadSettings() {
         return new Promise((resolve) => {
@@ -41,7 +44,7 @@ class PopupManager {
     }
 
     /**
-     * Sauvegarder les paramètres
+     * Save settings
      */
     async saveSettings() {
         return new Promise((resolve) => {

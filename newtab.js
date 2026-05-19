@@ -197,12 +197,12 @@ class AuraTabManager {
             });
         }
 
-        // Bouton Enregistrer
+        // Save button
         const saveSettingsBtn = document.getElementById('save-settings-btn');
         if (saveSettingsBtn) {
             saveSettingsBtn.addEventListener('click', () => {
                 this.toggleSettings(false);
-                this.showNotification('✅ Paramètres enregistrés!');
+                this.showNotification(i18n.get('settings_saved'));
             });
         }
 
@@ -422,13 +422,13 @@ class AuraTabManager {
         // Vérifier le type de fichier
         const validTypes = ['image/png', 'image/jpeg', 'image/gif'];
         if (!validTypes.includes(file.type)) {
-            this.showNotification('❌ Format non supporté. Utilisez PNG, JPG ou GIF.');
+            this.showNotification(i18n.get('format_error'));
             return;
         }
 
         // Vérifier la taille (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
-            this.showNotification('❌ Le fichier est trop volumineux (max 5MB).');
+            this.showNotification(i18n.get('file_too_large'));
             return;
         }
 
@@ -445,7 +445,7 @@ class AuraTabManager {
             reader.readAsDataURL(file);
         } catch (error) {
             console.error('Erreur lors de l\'upload:', error);
-            this.showNotification('❌ Erreur lors du chargement du fond');
+            this.showNotification(i18n.get('wallpaper_load_error'));
         }
     }
 
@@ -596,7 +596,7 @@ class AuraTabManager {
         const icon = document.getElementById('shortcut-icon').value.trim() || '📌';
 
         if (!name || !url) {
-            this.showNotification('❌ Veuillez remplir tous les champs');
+            this.showNotification(i18n.get('all_fields_required'));
             return;
         }
 
@@ -604,7 +604,7 @@ class AuraTabManager {
         try {
             new URL(url);
         } catch (e) {
-            this.showNotification('❌ URL invalide');
+            this.showNotification(i18n.get('invalid_url'));
             return;
         }
 
@@ -613,14 +613,14 @@ class AuraTabManager {
         if (this.editingShortcutIndex !== null) {
             // Modifier un raccourci existant
             this.settings.shortcuts[this.editingShortcutIndex] = shortcut;
-            this.showNotification('✅ Raccourci modifié');
+            this.showNotification(i18n.get('shortcut_edited'));
         } else {
             // Ajouter un nouveau raccourci
             if (!this.settings.shortcuts) {
                 this.settings.shortcuts = [];
             }
             this.settings.shortcuts.push(shortcut);
-            this.showNotification('✅ Raccourci ajouté');
+            this.showNotification(i18n.get('shortcut_added'));
         }
 
         await this.saveSettings();
@@ -700,7 +700,7 @@ class AuraTabManager {
         if (this.settings.wallpaper) {
             const previewBox = document.getElementById('preview-wallpaper');
             previewBox.style.backgroundImage = `url(${this.settings.wallpaper})`;
-            document.getElementById('wallpaper-info-text').textContent = '✅ Fond personnalisé chargé';
+            document.getElementById('wallpaper-info-text').textContent = i18n.get('wallpaper_loaded');
         }
 
         // Mettre à jour la liste des raccourcis
