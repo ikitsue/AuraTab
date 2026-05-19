@@ -28,6 +28,9 @@ class AuraTabManager {
      */
     async init() {
         try {
+            // Initialize internationalization first
+            await i18n.init();
+            
             // Load saved settings
             await this.loadSettings();
             

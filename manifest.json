@@ -44,7 +44,9 @@
       "resources": [
         "sounds/*",
         "wallpapers/*",
-        "images/*"
+        "images/*",
+        "translations.json",
+        "i18n.js"
       ],
       "matches": ["<all_urls>"]
     }

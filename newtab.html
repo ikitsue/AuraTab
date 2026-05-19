@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuraTab - New Tab</title>
     <link rel="stylesheet" href="newtab-style.css">
+    <script src="i18n.js"></script>
 </head>
 <body>
     <!-- Fond d'écran dynamique -->
@@ -45,6 +46,7 @@
                     id="search-input" 
                     class="search-input" 
                     placeholder="Search..."
+                    data-i18n="search"
                     aria-label="Search"
                 >
                 <div id="search-suggestions" class="search-suggestions hidden"></div>
@@ -70,23 +72,23 @@
                     <div class="shortcut-icon">🔗</div>
                     <span>Reddit</span>
                 </a>
-                <button id="add-shortcut-btn" class="shortcut-card add-shortcut" title="Add shortcut">
+                <button id="add-shortcut-btn" class="shortcut-card add-shortcut" title="Add shortcut" data-i18n="add">
                     <div class="shortcut-icon">➕</div>
-                    <span>Add</span>
+                    <span data-i18n="add">Add</span>
                 </button>
             </div>
         </section>
 
         <!-- Panneau de contrôle flottant -->
         <div class="floating-control-panel">
-            <button id="toggle-settings-btn" class="control-btn settings-btn" title="Settings">
+            <button id="toggle-settings-btn" class="control-btn settings-btn" title="Settings" data-i18n="settings">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <circle cx="12" cy="12" r="1.5"></circle>
                     <circle cx="19" cy="12" r="1.5"></circle>
                     <circle cx="5" cy="12" r="1.5"></circle>
                 </svg>
             </button>
-            <button id="sound-toggle-btn" class="control-btn sound-btn" title="Toggle Sound">
+            <button id="sound-toggle-btn" class="control-btn sound-btn" title="Toggle Sound" data-i18n="toggle_sound">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.26 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
                 </svg>
@@ -97,24 +99,24 @@
         <div id="settings-modal" class="settings-modal hidden">
             <div class="settings-panel">
                 <div class="settings-header">
-                    <h2>AuraTab Settings</h2>
+                    <h2 data-i18n="aura_settings">AuraTab Settings</h2>
                     <button id="close-settings-btn" class="close-btn">&times;</button>
                 </div>
 
                 <div class="settings-content">
-                    <!-- Section Fond d'écran -->
+                    <!-- Section Wallpaper -->
                     <div class="settings-section">
-                        <h3>🎨 Wallpaper</h3>
+                        <h3 data-i18n="wallpaper">🎨 Wallpaper</h3>
                         
                         <div class="wallpaper-preview">
                             <div id="preview-wallpaper" class="preview-box"></div>
                         </div>
 
                         <div class="wallpaper-actions">
-                            <button id="upload-wallpaper-btn" class="action-btn primary-btn">
+                            <button id="upload-wallpaper-btn" class="action-btn primary-btn" data-i18n="upload_wallpaper">
                                 📤 Upload Wallpaper
                             </button>
-                            <button id="remove-wallpaper-btn" class="action-btn danger-btn">
+                            <button id="remove-wallpaper-btn" class="action-btn danger-btn" data-i18n="remove_wallpaper">
                                 🗑️ Remove Wallpaper
                             </button>
                             <input 
@@ -126,13 +128,13 @@
                         </div>
 
                         <div class="wallpaper-info">
-                            <p id="wallpaper-info-text">No custom wallpaper</p>
+                            <p id="wallpaper-info-text" data-i18n="no_custom_wallpaper">No custom wallpaper</p>
                         </div>
                     </div>
 
                     <!-- Section Interface -->
                     <div class="settings-section">
-                        <h3>⚙️ Interface</h3>
+                        <h3 data-i18n="interface">⚙️ Interface</h3>
                         
                         <label class="option-toggle">
                             <input 
@@ -141,7 +143,7 @@
                                 class="checkbox"
                                 checked
                             >
-                            <span>Show shortcuts</span>
+                            <span data-i18n="show_shortcuts">Show shortcuts</span>
                         </label>
 
                         <label class="option-toggle">
@@ -151,7 +153,7 @@
                                 class="checkbox"
                                 checked
                             >
-                            <span>Show weather</span>
+                            <span data-i18n="show_weather">Show weather</span>
                         </label>
 
                         <label class="option-toggle">
@@ -161,72 +163,73 @@
                                 class="checkbox"
                                 checked
                             >
-                            <span>Show clock</span>
+                            <span data-i18n="show_clock">Show clock</span>
                         </label>
                     </div>
 
-                    <!-- Section Moteur de Recherche -->
+                    <!-- Section Search Engine -->
                     <div class="settings-section">
-                        <h3>🔍 Search Engine</h3>
+                        <h3 data-i18n="search_engine">🔍 Search Engine</h3>
                         
                         <label class="search-engine-label">
-                            <span>Choose default engine:</span>
+                            <span data-i18n="choose_engine">Choose default engine:</span>
                             <select id="search-engine" class="search-engine-select">
-                                <option value="google">🔵 Google</option>
-                                <option value="brave">🦁 Brave Search</option>
-                                <option value="duckduckgo">🦆 DuckDuckGo</option>
-                                <option value="ecosia">🌱 Ecosia</option>
-                                <option value="bing">💙 Bing</option>
+                                <option value="google" data-i18n="google">🔵 Google</option>
+                                <option value="brave" data-i18n="brave_search">🦁 Brave Search</option>
+                                <option value="duckduckgo" data-i18n="duckduckgo">🦆 DuckDuckGo</option>
+                                <option value="ecosia" data-i18n="ecosia">🌱 Ecosia</option>
+                                <option value="bing" data-i18n="bing">💙 Bing</option>
                             </select>
                         </label>
                     </div>
 
-                    <!-- Section Raccourcis -->
+                    <!-- Section Custom Shortcuts -->
                     <div class="settings-section">
-                        <h3>🔗 Custom Shortcuts</h3>
+                        <h3 data-i18n="custom_shortcuts">🔗 Custom Shortcuts</h3>
                         <div id="shortcuts-list" class="shortcuts-list"></div>
-                        <button id="add-shortcut-settings-btn" class="action-btn primary-btn">
+                        <button id="add-shortcut-settings-btn" class="action-btn primary-btn" data-i18n="add_shortcut">
                             ➕ Add Shortcut
                         </button>
                     </div>
                 </div>
 
                 <div class="settings-footer">
-                    <p class="version">AuraTab v1.0.0</p>
-                    <button id="save-settings-btn" class="save-btn">💾 Save</button>
+                    <p class="version" data-i18n="version">AuraTab v1.0.0</p>
+                    <button id="save-settings-btn" class="save-btn" data-i18n="save">💾 Save</button>
                 </div>
             </div>
         </div>
 
-        <!-- Modal Ajouter/Modifier Raccourci -->
+        <!-- Modal Add/Edit Shortcut -->
         <div id="shortcut-modal" class="shortcut-modal hidden">
             <div class="shortcut-modal-content">
                 <div class="modal-header">
-                    <h2 id="shortcut-modal-title">Add Shortcut</h2>
+                    <h2 id="shortcut-modal-title" data-i18n="add_shortcut">Add Shortcut</h2>
                     <button id="close-shortcut-modal-btn" class="close-btn">&times;</button>
                 </div>
                 <div class="modal-body">
                     <label class="form-group">
-                        <span>Website Name:</span>
-                        <input type="text" id="shortcut-name" placeholder="ex: Gmail" maxlength="20">
+                        <span data-i18n="website_name">Website Name:</span>
+                        <input type="text" id="shortcut-name" placeholder="ex: Gmail" data-i18n="ex_gmail" maxlength="20">
                     </label>
                     <label class="form-group">
-                        <span>URL:</span>
-                        <input type="text" id="shortcut-url" placeholder="ex: https://gmail.com">
+                        <span data-i18n="url">URL:</span>
+                        <input type="text" id="shortcut-url" placeholder="ex: https://gmail.com" data-i18n="ex_https">
                     </label>
                     <label class="form-group">
-                        <span>Emoji/Icon:</span>
-                        <input type="text" id="shortcut-icon" placeholder="ex: 📧" maxlength="2">
+                        <span data-i18n="emoji_icon">Emoji/Icon:</span>
+                        <input type="text" id="shortcut-icon" placeholder="ex: 📧" data-i18n="ex_emoji" maxlength="2">
                     </label>
                 </div>
                 <div class="modal-footer">
-                    <button id="cancel-shortcut-btn" class="action-btn danger-btn">Cancel</button>
-                    <button id="save-shortcut-btn" class="action-btn primary-btn">Save</button>
+                    <button id="cancel-shortcut-btn" class="action-btn danger-btn" data-i18n="cancel">Cancel</button>
+                    <button id="save-shortcut-btn" class="action-btn primary-btn" data-i18n="save">Save</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="i18n.js"></script>
     <script src="newtab.js"></script>
 </body>
 </html>

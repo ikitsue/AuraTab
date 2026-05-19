@@ -24,6 +24,9 @@ class AuraTabSettings {
      */
     async init() {
         try {
+            // Initialize internationalization first
+            await i18n.init();
+            
             // Load saved settings
             await this.loadSettings();
             
@@ -71,7 +74,9 @@ class AuraTabSettings {
         const languageSelect = document.getElementById('language-select');
         if (languageSelect) {
             languageSelect.addEventListener('change', (e) => {
-                this.settings.language = e.target.value;
+                const newLanguage = e.target.value;
+                i18n.setLanguage(newLanguage);
+                this.settings.language = newLanguage;
                 this.saveSettings();
             });
         }
