@@ -122,13 +122,6 @@ class AuraTabManager {
             this.removeWallpaper();
         });
 
-        // Volume
-        document.getElementById('volume-slider').addEventListener('change', (e) => {
-            this.settings.volume = parseInt(e.target.value);
-            document.getElementById('volume-value').textContent = this.settings.volume + '%';
-            this.saveSettings();
-        });
-
         // Options d'interface
         document.getElementById('show-shortcuts').addEventListener('change', (e) => {
             this.settings.showShortcuts = e.target.checked;
@@ -189,8 +182,6 @@ class AuraTabManager {
      * Mettre à jour l'interface des paramètres
      */
     updateSettingsUI() {
-        document.getElementById('volume-slider').value = this.settings.volume;
-        document.getElementById('volume-value').textContent = this.settings.volume + '%';
         document.getElementById('show-shortcuts').checked = this.settings.showShortcuts;
         document.getElementById('show-weather').checked = this.settings.showWeather;
         document.getElementById('show-time').checked = this.settings.showTime;
