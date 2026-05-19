@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,13 +19,13 @@
         <header class="header">
             <div class="clock-widget">
                 <div id="time" class="time">00:00</div>
-                <div id="date" class="date">Lundi, 18 mai</div>
+                <div id="date" class="date">Monday, May 18</div>
             </div>
             <div class="header-right">
                 <div class="weather-widget">
                     <span id="temp" class="temp">--°C</span>
                 </div>
-                <button id="settings-btn-header" class="settings-btn-header" title="Paramètres">
+                <button id="settings-btn-header" class="settings-btn-header" title="Settings">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.64l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.22-.07.49.12.64l2.03 1.58c-.05.3-.07.62-.07.94 0 .32.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.64l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.64l-2.11-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"></path>
                     </svg>
@@ -44,8 +44,8 @@
                     type="text" 
                     id="search-input" 
                     class="search-input" 
-                    placeholder="Recherche..."
-                    aria-label="Rechercher"
+                    placeholder="Search..."
+                    aria-label="Search"
                 >
                 <div id="search-suggestions" class="search-suggestions hidden"></div>
             </div>
@@ -70,23 +70,23 @@
                     <div class="shortcut-icon">🔗</div>
                     <span>Reddit</span>
                 </a>
-                <button id="add-shortcut-btn" class="shortcut-card add-shortcut" title="Ajouter un raccourci">
+                <button id="add-shortcut-btn" class="shortcut-card add-shortcut" title="Add shortcut">
                     <div class="shortcut-icon">➕</div>
-                    <span>Ajouter</span>
+                    <span>Add</span>
                 </button>
             </div>
         </section>
 
         <!-- Panneau de contrôle flottant -->
         <div class="floating-control-panel">
-            <button id="toggle-settings-btn" class="control-btn settings-btn" title="Paramètres">
+            <button id="toggle-settings-btn" class="control-btn settings-btn" title="Settings">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <circle cx="12" cy="12" r="1.5"></circle>
                     <circle cx="19" cy="12" r="1.5"></circle>
                     <circle cx="5" cy="12" r="1.5"></circle>
                 </svg>
             </button>
-            <button id="sound-toggle-btn" class="control-btn sound-btn" title="Activer/Désactiver les sons">
+            <button id="sound-toggle-btn" class="control-btn sound-btn" title="Toggle Sound">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.26 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
                 </svg>
@@ -97,14 +97,14 @@
         <div id="settings-modal" class="settings-modal hidden">
             <div class="settings-panel">
                 <div class="settings-header">
-                    <h2>Paramètres AuraTab</h2>
+                    <h2>AuraTab Settings</h2>
                     <button id="close-settings-btn" class="close-btn">&times;</button>
                 </div>
 
                 <div class="settings-content">
                     <!-- Section Fond d'écran -->
                     <div class="settings-section">
-                        <h3>🎨 Fond d'écran</h3>
+                        <h3>🎨 Wallpaper</h3>
                         
                         <div class="wallpaper-preview">
                             <div id="preview-wallpaper" class="preview-box"></div>
@@ -112,10 +112,10 @@
 
                         <div class="wallpaper-actions">
                             <button id="upload-wallpaper-btn" class="action-btn primary-btn">
-                                📤 Charger un fond
+                                📤 Upload Wallpaper
                             </button>
                             <button id="remove-wallpaper-btn" class="action-btn danger-btn">
-                                🗑️ Supprimer le fond
+                                🗑️ Remove Wallpaper
                             </button>
                             <input 
                                 type="file" 
@@ -126,7 +126,7 @@
                         </div>
 
                         <div class="wallpaper-info">
-                            <p id="wallpaper-info-text">Aucun fond personnalisé</p>
+                            <p id="wallpaper-info-text">No custom wallpaper</p>
                         </div>
                     </div>
 
@@ -141,7 +141,7 @@
                                 class="checkbox"
                                 checked
                             >
-                            <span>Afficher les raccourcis</span>
+                            <span>Show shortcuts</span>
                         </label>
 
                         <label class="option-toggle">
@@ -151,7 +151,7 @@
                                 class="checkbox"
                                 checked
                             >
-                            <span>Afficher la météo</span>
+                            <span>Show weather</span>
                         </label>
 
                         <label class="option-toggle">
@@ -161,16 +161,16 @@
                                 class="checkbox"
                                 checked
                             >
-                            <span>Afficher l'horloge</span>
+                            <span>Show clock</span>
                         </label>
                     </div>
 
                     <!-- Section Moteur de Recherche -->
                     <div class="settings-section">
-                        <h3>🔍 Moteur de recherche</h3>
+                        <h3>🔍 Search Engine</h3>
                         
                         <label class="search-engine-label">
-                            <span>Choisir le moteur par défaut:</span>
+                            <span>Choose default engine:</span>
                             <select id="search-engine" class="search-engine-select">
                                 <option value="google">🔵 Google</option>
                                 <option value="brave">🦁 Brave Search</option>
@@ -183,17 +183,17 @@
 
                     <!-- Section Raccourcis -->
                     <div class="settings-section">
-                        <h3>🔗 Raccourcis personnalisés</h3>
+                        <h3>🔗 Custom Shortcuts</h3>
                         <div id="shortcuts-list" class="shortcuts-list"></div>
                         <button id="add-shortcut-settings-btn" class="action-btn primary-btn">
-                            ➕ Ajouter un raccourci
+                            ➕ Add Shortcut
                         </button>
                     </div>
                 </div>
 
                 <div class="settings-footer">
                     <p class="version">AuraTab v1.0.0</p>
-                    <button id="save-settings-btn" class="save-btn">💾 Enregistrer</button>
+                    <button id="save-settings-btn" class="save-btn">💾 Save</button>
                 </div>
             </div>
         </div>
@@ -202,12 +202,12 @@
         <div id="shortcut-modal" class="shortcut-modal hidden">
             <div class="shortcut-modal-content">
                 <div class="modal-header">
-                    <h2 id="shortcut-modal-title">Ajouter un raccourci</h2>
+                    <h2 id="shortcut-modal-title">Add Shortcut</h2>
                     <button id="close-shortcut-modal-btn" class="close-btn">&times;</button>
                 </div>
                 <div class="modal-body">
                     <label class="form-group">
-                        <span>Nom du site:</span>
+                        <span>Website Name:</span>
                         <input type="text" id="shortcut-name" placeholder="ex: Gmail" maxlength="20">
                     </label>
                     <label class="form-group">
@@ -215,13 +215,13 @@
                         <input type="text" id="shortcut-url" placeholder="ex: https://gmail.com">
                     </label>
                     <label class="form-group">
-                        <span>Emoji/Icône:</span>
+                        <span>Emoji/Icon:</span>
                         <input type="text" id="shortcut-icon" placeholder="ex: 📧" maxlength="2">
                     </label>
                 </div>
                 <div class="modal-footer">
-                    <button id="cancel-shortcut-btn" class="action-btn danger-btn">Annuler</button>
-                    <button id="save-shortcut-btn" class="action-btn primary-btn">Enregistrer</button>
+                    <button id="cancel-shortcut-btn" class="action-btn danger-btn">Cancel</button>
+                    <button id="save-shortcut-btn" class="action-btn primary-btn">Save</button>
                 </div>
             </div>
         </div>

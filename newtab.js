@@ -1,11 +1,11 @@
 /**
  * AuraTab - New Tab Page Logic
- * Gestion du fond d'écran, effets sonores, horloge et interface
+ * Manage wallpaper, sound effects, clock and interface
  */
 
 class AuraTabManager {
     constructor() {
-        // Stocker l'instance globale pour accès depuis les listeners
+        // Store global instance for listener access
         window.appManager = this;
 
         this.settings = {
@@ -24,40 +24,40 @@ class AuraTabManager {
     }
 
     /**
-     * Initialisation de l'application
+     * Initialize the application
      */
     async init() {
         try {
-            // Charger les paramètres sauvegardés
+            // Load saved settings
             await this.loadSettings();
             
-            // Configurer les événements de l'interface
+            // Setup interface events
             this.setupEventListeners();
             
-            // Initialiser l'horloge
+            // Initialize clock
             this.updateClock();
             setInterval(() => this.updateClock(), 1000);
             
-            // Charger et afficher le fond d'écran
+            // Load and display wallpaper
             await this.loadWallpaper();
             
-            // Afficher les raccourcis personnalisés
+            // Display custom shortcuts
             this.renderShortcuts();
             
-            // Mettre à jour l'interface selon les paramètres
+            // Update interface according to settings
             this.updateUI();
             
-            // Enregistrer les modifications de paramètres
+            // Record settings changes
             this.monitorSettings();
             
             console.log('✅ AuraTab initialized successfully');
         } catch (error) {
-            console.error('❌ Erreur lors de l\'initialisation:', error);
+            console.error('❌ Error during initialization:', error);
         }
     }
 
     /**
-     * Charger les paramètres depuis le stockage Chrome
+     * Load settings from Chrome storage
      */
     async loadSettings() {
         return new Promise((resolve, reject) => {
@@ -75,7 +75,7 @@ class AuraTabManager {
     }
 
     /**
-     * Sauvegarder les paramètres dans le stockage Chrome
+     * Save settings to Chrome storage
      */
     async saveSettings() {
         return new Promise((resolve, reject) => {
@@ -90,10 +90,10 @@ class AuraTabManager {
     }
 
     /**
-     * Configuration des écouteurs d'événements
+     * Setup event listeners
      */
     setupEventListeners() {
-        // Bouton Paramètres (page dédiée) - Header
+        // Settings button (dedicated page) - Header
         const settingsHeaderBtn = document.getElementById('settings-btn-header');
         if (settingsHeaderBtn) {
             settingsHeaderBtn.addEventListener('click', () => {
@@ -101,7 +101,7 @@ class AuraTabManager {
             });
         }
 
-        // Bouton Paramètres (Configuration rapide)
+        // Settings button (Quick Settings)
         const settingsBtn = document.getElementById('settings-btn');
         if (settingsBtn) {
             settingsBtn.addEventListener('click', () => {
@@ -109,7 +109,7 @@ class AuraTabManager {
             });
         }
 
-        // Bouton Paramètres
+        // Settings button
         const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
         if (toggleSettingsBtn) {
             toggleSettingsBtn.addEventListener('click', () => {
@@ -117,7 +117,7 @@ class AuraTabManager {
             });
         }
 
-        // Bouton Fermer paramètres
+        // Close settings button
         const closeSettingsBtn = document.getElementById('close-settings-btn');
         if (closeSettingsBtn) {
             closeSettingsBtn.addEventListener('click', () => {
@@ -125,7 +125,7 @@ class AuraTabManager {
             });
         }
 
-        // Bouton son master
+        // Master sound button
         const soundToggleBtn = document.getElementById('sound-toggle-btn');
         if (soundToggleBtn) {
             soundToggleBtn.addEventListener('click', () => {
@@ -133,7 +133,7 @@ class AuraTabManager {
             });
         }
 
-        // Fermer les paramètres en cliquant en dehors
+        // Close settings by clicking outside
         const settingsModal = document.getElementById('settings-modal');
         if (settingsModal) {
             settingsModal.addEventListener('click', (e) => {
@@ -143,7 +143,7 @@ class AuraTabManager {
             });
         }
 
-        // Upload du fond d'écran
+        // Upload wallpaper
         const uploadBtn = document.getElementById('upload-wallpaper-btn');
         if (uploadBtn) {
             uploadBtn.addEventListener('click', () => {
@@ -158,7 +158,7 @@ class AuraTabManager {
             });
         }
 
-        // Supprimer le fond
+        // Remove wallpaper
         const removeWallpaperBtn = document.getElementById('remove-wallpaper-btn');
         if (removeWallpaperBtn) {
             removeWallpaperBtn.addEventListener('click', () => {
@@ -166,7 +166,7 @@ class AuraTabManager {
             });
         }
 
-        // Options d'interface
+        // Interface options
         const showShortcuts = document.getElementById('show-shortcuts');
         if (showShortcuts) {
             showShortcuts.addEventListener('change', (e) => {

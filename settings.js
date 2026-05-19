@@ -1,6 +1,6 @@
 /**
  * AuraTab - Settings Page Logic
- * Gestion des paramètres de la page dédiée
+ * Manage settings for the dedicated page
  */
 
 class AuraTabSettings {
@@ -20,28 +20,28 @@ class AuraTabSettings {
     }
 
     /**
-     * Initialisation de la page paramètres
+     * Initialize settings page
      */
     async init() {
         try {
-            // Charger les paramètres sauvegardés
+            // Load saved settings
             await this.loadSettings();
             
-            // Configurer les événements
+            // Setup events
             this.setupEventListeners();
             
-            // Charger le fond d'écran
+            // Load wallpaper
             await this.loadWallpaper();
             
-            // Mettre à jour l'affichage des paramètres
+            // Update settings display
             this.updateSettingsUI();
         } catch (error) {
-            console.error('Erreur lors de l\'initialisation des paramètres:', error);
+            console.error('Error during settings initialization:', error);
         }
     }
 
     /**
-     * Charger les paramètres depuis le stockage
+     * Load settings from storage
      */
     async loadSettings() {
         return new Promise((resolve) => {
@@ -55,7 +55,7 @@ class AuraTabSettings {
     }
 
     /**
-     * Sauvegarder les paramètres
+     * Save settings
      */
     async saveSettings() {
         return new Promise((resolve) => {
@@ -64,10 +64,10 @@ class AuraTabSettings {
     }
 
     /**
-     * Configurer les écouteurs d'événements
+     * Setup event listeners
      */
     setupEventListeners() {
-        // Langue
+        // Language
         const languageSelect = document.getElementById('language-select');
         if (languageSelect) {
             languageSelect.addEventListener('change', (e) => {
@@ -78,7 +78,7 @@ class AuraTabSettings {
     }
 
     /**
-     * Mettre à jour l'affichage du volume
+     * Update volume display
      */
     updateVolumeDisplay() {
         const volumeSlider = document.getElementById('volume-slider');
@@ -89,10 +89,10 @@ class AuraTabSettings {
     }
 
     /**
-     * Mettre à jour l'interface des paramètres
+     * Update settings interface
      */
     updateSettingsUI() {
-        // Mettre à jour la langue
+        // Update language select
         const languageSelect = document.getElementById('language-select');
         if (languageSelect) {
             languageSelect.value = this.settings.language;
@@ -100,11 +100,11 @@ class AuraTabSettings {
     }
 
     /**
-     * Charger et afficher le fond d'écran
+     * Load and display wallpaper
      */
     async loadWallpaper() {
         try {
-            // Charger depuis le stockage
+            // Load from storage
             const stored = await new Promise((resolve) => {
                 chrome.storage.local.get('currentWallpaper', (result) => {
                     resolve(result.currentWallpaper);
@@ -115,12 +115,12 @@ class AuraTabSettings {
                 this.applyWallpaper(stored);
             }
         } catch (error) {
-            console.error('Erreur lors du chargement du fond d\'écran:', error);
+            console.error('Error loading wallpaper:', error);
         }
     }
 
     /**
-     * Appliquer le fond d'écran
+     * Apply wallpaper
      */
     applyWallpaper(wallpaperPath) {
         const wallpaperDisplay = document.getElementById('wallpaper-display');
