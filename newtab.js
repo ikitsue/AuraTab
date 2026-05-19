@@ -93,6 +93,14 @@ class AuraTabManager {
      * Configuration des écouteurs d'événements
      */
     setupEventListeners() {
+        // Bouton Paramètres (page dédiée)
+        const settingsHeaderBtn = document.getElementById('settings-btn-header');
+        if (settingsHeaderBtn) {
+            settingsHeaderBtn.addEventListener('click', () => {
+                window.location.href = chrome.runtime.getURL('settings.html');
+            });
+        }
+
         // Bouton Paramètres
         document.getElementById('toggle-settings-btn').addEventListener('click', () => {
             this.toggleSettings();
