@@ -62,11 +62,31 @@
                     <div class="shortcut-icon">🔗</div>
                     <span>Reddit</span>
                 </a>
+                <button id="add-shortcut-btn" class="shortcut-card add-shortcut" title="Ajouter un raccourci">
+                    <div class="shortcut-icon">➕</div>
+                    <span>Ajouter</span>
+                </button>
             </div>
         </section>
 
+        <!-- Menu dépliant des raccourcis -->
+        <div id="shortcuts-menu" class="shortcuts-menu hidden">
+            <div class="shortcuts-menu-header">
+                <h3>Mes Raccourcis</h3>
+                <button id="close-shortcuts-menu-btn" class="close-btn">✕</button>
+            </div>
+            <div id="shortcuts-menu-list" class="shortcuts-menu-list"></div>
+        </div>
+
         <!-- Panneau de contrôle flottant -->
         <div class="floating-control-panel">
+            <button id="toggle-shortcuts-menu-btn" class="control-btn shortcuts-menu-btn" title="Menu raccourcis">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="3" y="3" width="18" height="2"></rect>
+                    <rect x="3" y="9" width="18" height="2"></rect>
+                    <rect x="3" y="15" width="18" height="2"></rect>
+                </svg>
+            </button>
             <button id="toggle-settings-btn" class="control-btn settings-btn" title="Paramètres">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <circle cx="12" cy="12" r="1.5"></circle>
@@ -152,11 +172,48 @@
                             <span>Afficher l'horloge</span>
                         </label>
                     </div>
+
+                    <!-- Section Raccourcis -->
+                    <div class="settings-section">
+                        <h3>🔗 Raccourcis personnalisés</h3>
+                        <div id="shortcuts-list" class="shortcuts-list"></div>
+                        <button id="add-shortcut-settings-btn" class="action-btn primary-btn">
+                            ➕ Ajouter un raccourci
+                        </button>
+                    </div>
                 </div>
 
                 <div class="settings-footer">
                     <p class="version">AuraTab v1.0.0</p>
                     <button id="save-settings-btn" class="save-btn">💾 Enregistrer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Ajouter/Modifier Raccourci -->
+        <div id="shortcut-modal" class="shortcut-modal hidden">
+            <div class="shortcut-modal-content">
+                <div class="modal-header">
+                    <h2 id="shortcut-modal-title">Ajouter un raccourci</h2>
+                    <button class="close-btn" onclick="document.getElementById('shortcut-modal').classList.add('hidden')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-group">
+                        <span>Nom du site:</span>
+                        <input type="text" id="shortcut-name" placeholder="ex: Gmail" maxlength="20">
+                    </label>
+                    <label class="form-group">
+                        <span>URL:</span>
+                        <input type="text" id="shortcut-url" placeholder="ex: https://gmail.com">
+                    </label>
+                    <label class="form-group">
+                        <span>Emoji/Icône:</span>
+                        <input type="text" id="shortcut-icon" placeholder="ex: 📧" maxlength="2">
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel-shortcut-btn" class="action-btn danger-btn">Annuler</button>
+                    <button id="save-shortcut-btn" class="action-btn primary-btn">Enregistrer</button>
                 </div>
             </div>
         </div>

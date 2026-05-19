@@ -269,6 +269,50 @@ body {
     font-weight: 500;
 }
 
+/* Conteneur des raccourcis avec bouton de suppression */
+.shortcut-container {
+    position: relative;
+}
+
+.shortcut-container .shortcut-card {
+    width: 100%;
+    height: 100%;
+}
+
+.shortcut-delete-quick {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 56, 96, 0.85);
+    border: 2px solid var(--danger-color);
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(255, 56, 96, 0.3);
+}
+
+.shortcut-container:hover .shortcut-delete-quick {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.shortcut-delete-quick:hover {
+    background: rgba(255, 56, 96, 1);
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(255, 56, 96, 0.5);
+}
+
 /* ============================================================
    Panneau de contrôle flottant
    ============================================================ */
@@ -336,6 +380,174 @@ body {
 .sound-btn.muted {
     opacity: 0.5;
     color: var(--text-muted);
+}
+
+.shortcuts-menu-btn {
+    color: var(--success-color);
+}
+
+.shortcuts-menu-btn:hover {
+    border-color: var(--success-color);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+/* ============================================================
+   Menu Dépliant des Raccourcis
+   ============================================================ */
+
+.shortcuts-menu {
+    position: fixed;
+    bottom: 120px;
+    left: var(--spacing-xl);
+    width: 320px;
+    max-height: 80vh;
+    background: var(--surface-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0, 217, 255, 0.2);
+    animation: slideInUp var(--transition-normal) ease;
+    z-index: 150;
+}
+
+.shortcuts-menu.hidden {
+    display: none;
+    animation: slideOutDown var(--transition-normal) ease;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOutDown {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+.shortcuts-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.shortcuts-menu-header h3 {
+    font-size: 1.1rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.shortcuts-menu-header .close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+    padding: 0;
+}
+
+.shortcuts-menu-header .close-btn:hover {
+    color: var(--primary-color);
+}
+
+.shortcuts-menu-list {
+    padding: var(--spacing-md) 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.shortcuts-menu-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.shortcuts-menu-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.shortcuts-menu-list::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+    opacity: 0.5;
+}
+
+.shortcuts-menu-list::-webkit-scrollbar-thumb:hover {
+    opacity: 1;
+}
+
+.shortcuts-menu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.shortcuts-menu-item:hover {
+    background: rgba(0, 217, 255, 0.1);
+    border-left-color: var(--primary-color);
+}
+
+.shortcuts-menu-item .shortcut-icon {
+    font-size: 1.5rem;
+    min-width: 24px;
+}
+
+.shortcuts-menu-item .shortcut-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.shortcuts-menu-item .shortcut-edit {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all var(--transition-fast);
+    opacity: 0;
+}
+
+.shortcuts-menu-item:hover .shortcut-edit {
+    opacity: 1;
+}
+
+.shortcuts-menu-item .shortcut-edit:hover {
+    background: rgba(0, 217, 255, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.shortcuts-menu-empty {
+    padding: var(--spacing-lg) var(--spacing-md);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
 }
 
 /* ============================================================
@@ -675,6 +887,206 @@ body {
 .save-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(255, 0, 110, 0.3);
+}
+
+/* ============================================================
+   Bouton Ajouter Raccourci
+   ============================================================ */
+
+.add-shortcut {
+    background: rgba(131, 56, 236, 0.1) !important;
+    border: 2px dashed var(--tertiary-color) !important;
+}
+
+.add-shortcut:hover {
+    background: rgba(131, 56, 236, 0.2) !important;
+    border-color: var(--tertiary-color) !important;
+    box-shadow: 0 8px 24px rgba(131, 56, 236, 0.2) !important;
+}
+
+/* ============================================================
+   Modal Raccourci
+   ============================================================ */
+
+.shortcut-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 39, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 250;
+    opacity: 1;
+    transition: opacity var(--transition-normal);
+}
+
+.shortcut-modal.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.shortcut-modal-content {
+    background: var(--surface-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    backdrop-filter: blur(20px);
+    animation: slideUp var(--transition-normal) ease;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-size: 1.3rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.modal-body {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.form-group span {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.form-group input {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(26, 31, 58, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    outline: none;
+    transition: all var(--transition-normal);
+}
+
+.form-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+    background: rgba(26, 31, 58, 0.7);
+}
+
+.form-group input::placeholder {
+    color: var(--text-muted);
+}
+
+.modal-footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+}
+
+.modal-footer .action-btn {
+    flex: 0 1 auto;
+}
+
+/* Liste des raccourcis dans les paramètres */
+.shortcuts-list {
+    margin-bottom: var(--spacing-md);
+}
+
+.shortcuts-list .shortcut-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: rgba(26, 31, 58, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: var(--spacing-sm);
+    transition: all var(--transition-normal);
+}
+
+.shortcuts-list .shortcut-item:hover {
+    background: rgba(26, 31, 58, 0.7);
+    border-color: var(--primary-color);
+}
+
+.shortcut-item-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.shortcut-item-icon {
+    font-size: 1.5rem;
+}
+
+.shortcut-item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.shortcut-item-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.shortcut-item-url {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    word-break: break-all;
+}
+
+.shortcut-item-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.shortcut-item-actions button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all var(--transition-fast);
+}
+
+.shortcut-edit-btn {
+    background: rgba(0, 217, 255, 0.2);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.shortcut-edit-btn:hover {
+    background: rgba(0, 217, 255, 0.3);
+}
+
+.shortcut-delete-btn {
+    background: rgba(255, 56, 96, 0.2);
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+
+.shortcut-delete-btn:hover {
+    background: rgba(255, 56, 96, 0.3);
 }
 
 /* ============================================================

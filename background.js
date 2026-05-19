@@ -98,8 +98,6 @@ function setupEventListeners() {
  * Gestion: nouvel onglet créé
  */
 function handleTabCreated(tab) {
-    console.log('📂 Onglet créé:', tab.id);
-
     // Ne pas jouer le son pour les onglets système
     if (tab.url && (tab.url.startsWith('chrome://') || tab.url.startsWith('brave://'))) {
         return;
@@ -118,8 +116,6 @@ function handleTabCreated(tab) {
  * Gestion: onglet fermé
  */
 function handleTabRemoved(tabId) {
-    console.log('❌ Onglet fermé:', tabId);
-
     // Jouer le son de fermeture d'onglet
     if (openTabs.has(tabId) && globalSettings.soundTabClose && globalSettings.soundEnabled) {
         playSound(SOUNDS.TAB_CLOSE);
@@ -135,8 +131,6 @@ function handleTabRemoved(tabId) {
 function handlePageReload(details) {
     // Vérifier si c'est un rechargement (frameId === 0 = frame principal)
     if (details.frameId === 0 && details.transitionType === 'reload') {
-        console.log('🔄 Page rechargée:', details.tabId);
-
         if (globalSettings.soundPageReload && globalSettings.soundEnabled) {
             playSound(SOUNDS.PAGE_RELOAD);
         }
@@ -154,7 +148,6 @@ function playSound(soundFile) {
     const lastPlayTime = soundSpamProtection[soundKey] || 0;
 
     if (now - lastPlayTime < soundSpamProtection.cooldown) {
-        console.log('⏱️ Son bloqué (anti-spam):', soundFile);
         return;
     }
 
@@ -178,8 +171,6 @@ function playSound(soundFile) {
                 });
             });
         });
-
-        console.log('🔊 Message de lecture envoyé pour:', soundFile);
     } catch (error) {
         console.error('❌ Erreur lors de l\'envoi du message audio:', error);
     }
@@ -189,8 +180,6 @@ function playSound(soundFile) {
  * Gestion des messages depuis popup/newtab
  */
 function handleMessage(request, sender, sendResponse) {
-    console.log('📨 Message reçu:', request.action);
-
     switch (request.action) {
         case 'playSound':
             playSound(request.soundFile);

@@ -13,8 +13,11 @@ class AuraTabManager {
             showShortcuts: true,
             showWeather: true,
             showTime: true,
-            wallpaper: null
+            wallpaper: null,
+            shortcuts: []
         };
+
+        this.editingShortcutIndex = null;
         
         this.init();
     }
@@ -36,6 +39,9 @@ class AuraTabManager {
             
             // Charger et afficher le fond d'écran
             await this.loadWallpaper();
+            
+            // Afficher les raccourcis personnalisés
+            this.renderShortcuts();
             
             // Mettre à jour l'interface selon les paramètres
             this.updateUI();
@@ -156,6 +162,50 @@ class AuraTabManager {
                 }
             }
         });
+
+        // Bouton Ajouter raccourci (depuis la page)
+        document.getElementById('add-shortcut-btn').addEventListener('click', () => {
+            this.openShortcutModal();
+        });
+
+        // Bouton Ajouter raccourci (depuis les paramètres)
+        document.getElementById('add-shortcut-settings-btn').addEventListener('click', () => {
+            this.openShortcutModal();
+        });
+
+        // Bouton Annuler du modal raccourci
+        document.getElementById('cancel-shortcut-btn').addEventListener('click', () => {
+            this.closeShortcutModal();
+        });
+
+        // Bouton Enregistrer du modal raccourci
+        document.getElementById('save-shortcut-btn').addEventListener('click', () => {
+            this.saveShortcut();
+        });
+
+        // Fermer le modal en cliquant en dehors
+        document.getElementById('shortcut-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'shortcut-modal') {
+                this.closeShortcutModal();
+            }
+        });
+
+        // Bouton Menu des raccourcis
+        document.getElementById('toggle-shortcuts-menu-btn').addEventListener('click', () => {
+            this.toggleShortcutsMenu();
+        });
+
+        // Bouton Fermer le menu des raccourcis
+        document.getElementById('close-shortcuts-menu-btn').addEventListener('click', () => {
+            this.toggleShortcutsMenu(false);
+        });
+
+        // Fermer le menu en cliquant en dehors
+        document.getElementById('shortcuts-menu').addEventListener('click', (e) => {
+            if (e.target.id === 'shortcuts-menu') {
+                this.toggleShortcutsMenu(false);
+            }
+        });
     }
 
     /**
@@ -181,19 +231,6 @@ class AuraTabManager {
     /**
      * Mettre à jour l'interface des paramètres
      */
-    updateSettingsUI() {
-        document.getElementById('show-shortcuts').checked = this.settings.showShortcuts;
-        document.getElementById('show-weather').checked = this.settings.showWeather;
-        document.getElementById('show-time').checked = this.settings.showTime;
-
-        // Mettre à jour l'aperçu du fond
-        if (this.settings.wallpaper) {
-            const previewBox = document.getElementById('preview-wallpaper');
-            previewBox.style.backgroundImage = `url(${this.settings.wallpaper})`;
-            document.getElementById('wallpaper-info-text').textContent = '✅ Fond personnalisé chargé';
-        }
-    }
-
     /**
      * Basculer le son master
      */
@@ -246,10 +283,18 @@ class AuraTabManager {
         const wallpaperDisplay = document.getElementById('wallpaper-display');
         
         if (this.settings.wallpaper) {
+            // Nettoyer le gradient par défaut du CSS
+            wallpaperDisplay.style.background = 'none';
             wallpaperDisplay.style.backgroundImage = `url('${this.settings.wallpaper}')`;
+            wallpaperDisplay.style.backgroundSize = 'cover';
+            wallpaperDisplay.style.backgroundPosition = 'center';
+            wallpaperDisplay.style.backgroundRepeat = 'no-repeat';
         } else {
             // Fond par défaut (gradient cyberpunk)
             wallpaperDisplay.style.background = 'linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(131, 56, 236, 0.1) 100%)';
+            wallpaperDisplay.style.backgroundSize = 'cover';
+            wallpaperDisplay.style.backgroundPosition = 'center';
+            wallpaperDisplay.style.backgroundRepeat = 'no-repeat';
         }
     }
 
@@ -328,6 +373,232 @@ class AuraTabManager {
             notification.style.animation = 'slideDown 300ms ease';
             setTimeout(() => notification.remove(), 300);
         }, 3000);
+    }
+
+    /**
+     * Ouvrir le modal pour ajouter/modifier un raccourci
+     */
+    openShortcutModal(index = null) {
+        const modal = document.getElementById('shortcut-modal');
+        const title = document.getElementById('shortcut-modal-title');
+        const nameInput = document.getElementById('shortcut-name');
+        const urlInput = document.getElementById('shortcut-url');
+        const iconInput = document.getElementById('shortcut-icon');
+
+        this.editingShortcutIndex = index;
+
+        if (index !== null) {
+            // Mode édition
+            title.textContent = 'Modifier le raccourci';
+            const shortcut = this.settings.shortcuts[index];
+            nameInput.value = shortcut.name;
+            urlInput.value = shortcut.url;
+            iconInput.value = shortcut.icon;
+        } else {
+            // Mode création
+            title.textContent = 'Ajouter un raccourci';
+            nameInput.value = '';
+            urlInput.value = '';
+            iconInput.value = '📌';
+        }
+
+        modal.classList.remove('hidden');
+        nameInput.focus();
+    }
+
+    /**
+     * Fermer le modal des raccourcis
+     */
+    closeShortcutModal() {
+        document.getElementById('shortcut-modal').classList.add('hidden');
+        this.editingShortcutIndex = null;
+    }
+
+    /**
+     * Enregistrer un raccourci
+     */
+    async saveShortcut() {
+        const name = document.getElementById('shortcut-name').value.trim();
+        const url = document.getElementById('shortcut-url').value.trim();
+        const icon = document.getElementById('shortcut-icon').value.trim() || '📌';
+
+        if (!name || !url) {
+            this.showNotification('❌ Veuillez remplir tous les champs');
+            return;
+        }
+
+        // Valider l'URL
+        try {
+            new URL(url);
+        } catch (e) {
+            this.showNotification('❌ URL invalide');
+            return;
+        }
+
+        const shortcut = { name, url, icon };
+
+        if (this.editingShortcutIndex !== null) {
+            // Modifier un raccourci existant
+            this.settings.shortcuts[this.editingShortcutIndex] = shortcut;
+            this.showNotification('✅ Raccourci modifié');
+        } else {
+            // Ajouter un nouveau raccourci
+            if (!this.settings.shortcuts) {
+                this.settings.shortcuts = [];
+            }
+            this.settings.shortcuts.push(shortcut);
+            this.showNotification('✅ Raccourci ajouté');
+        }
+
+        await this.saveSettings();
+        this.renderShortcuts();
+        this.updateSettingsUI();
+        this.closeShortcutModal();
+    }
+
+    /**
+     * Supprimer un raccourci
+     */
+    async deleteShortcut(index) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce raccourci?')) {
+            this.settings.shortcuts.splice(index, 1);
+            await this.saveSettings();
+            this.renderShortcuts();
+            this.updateSettingsUI();
+            this.showNotification('🗑️ Raccourci supprimé');
+        }
+    }
+
+    /**
+     * Afficher les raccourcis sur la page
+     */
+    renderShortcuts() {
+        const grid = document.getElementById('shortcuts-grid');
+        
+        // Supprimer tous les raccourcis sauf le bouton "Ajouter"
+        const shortcuts = grid.querySelectorAll('a, button:not(#add-shortcut-btn)');
+        shortcuts.forEach(el => el.remove());
+
+        // Ajouter les raccourcis personnalisés
+        if (this.settings.shortcuts && this.settings.shortcuts.length > 0) {
+            this.settings.shortcuts.forEach((shortcut, index) => {
+                const container = document.createElement('div');
+                container.className = 'shortcut-container';
+                
+                const card = document.createElement('a');
+                card.href = shortcut.url;
+                card.className = 'shortcut-card';
+                card.title = shortcut.name;
+                card.innerHTML = `
+                    <div class="shortcut-icon">${shortcut.icon}</div>
+                    <span>${shortcut.name}</span>
+                `;
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'shortcut-delete-quick';
+                deleteBtn.innerHTML = '🗑️';
+                deleteBtn.title = 'Supprimer ce raccourci';
+                deleteBtn.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.deleteShortcut(index);
+                };
+                
+                container.appendChild(card);
+                container.appendChild(deleteBtn);
+                
+                // Insérer avant le bouton "Ajouter"
+                const addBtn = document.getElementById('add-shortcut-btn');
+                grid.insertBefore(container, addBtn);
+            });
+        }
+
+        // Mettre à jour le menu dépliant
+        this.renderShortcutsMenu();
+    }
+
+    /**
+     * Afficher les raccourcis dans le menu dépliant
+     */
+    renderShortcutsMenu() {
+        const menuList = document.getElementById('shortcuts-menu-list');
+        menuList.innerHTML = '';
+
+        if (!this.settings.shortcuts || this.settings.shortcuts.length === 0) {
+            menuList.innerHTML = '<div class="shortcuts-menu-empty">Aucun raccourci personnalisé</div>';
+            return;
+        }
+
+        this.settings.shortcuts.forEach((shortcut, index) => {
+            const item = document.createElement('a');
+            item.href = shortcut.url;
+            item.className = 'shortcuts-menu-item';
+            item.innerHTML = `
+                <div class="shortcut-icon">${shortcut.icon}</div>
+                <div class="shortcut-name">${shortcut.name}</div>
+            `;
+            menuList.appendChild(item);
+        });
+    }
+
+    /**
+     * Basculer l'affichage du menu des raccourcis
+     */
+    toggleShortcutsMenu(show = null) {
+        const menu = document.getElementById('shortcuts-menu');
+        const isHidden = menu.classList.contains('hidden');
+        
+        if (show === null) {
+            show = isHidden;
+        }
+
+        if (show) {
+            menu.classList.remove('hidden');
+            this.renderShortcutsMenu();
+        } else {
+            menu.classList.add('hidden');
+        }
+    }
+
+    /**
+     * Mettre à jour l'interface des paramètres
+     */
+    updateSettingsUI() {
+        document.getElementById('show-shortcuts').checked = this.settings.showShortcuts;
+        document.getElementById('show-weather').checked = this.settings.showWeather;
+        document.getElementById('show-time').checked = this.settings.showTime;
+
+        // Mettre à jour l'aperçu du fond
+        if (this.settings.wallpaper) {
+            const previewBox = document.getElementById('preview-wallpaper');
+            previewBox.style.backgroundImage = `url(${this.settings.wallpaper})`;
+            document.getElementById('wallpaper-info-text').textContent = '✅ Fond personnalisé chargé';
+        }
+
+        // Mettre à jour la liste des raccourcis
+        const shortcutsList = document.getElementById('shortcuts-list');
+        shortcutsList.innerHTML = '';
+
+        if (this.settings.shortcuts && this.settings.shortcuts.length > 0) {
+            this.settings.shortcuts.forEach((shortcut, index) => {
+                const item = document.createElement('div');
+                item.className = 'shortcut-item';
+                item.innerHTML = `
+                    <div class="shortcut-item-content">
+                        <div class="shortcut-item-icon">${shortcut.icon}</div>
+                        <div class="shortcut-item-info">
+                            <div class="shortcut-item-name">${shortcut.name}</div>
+                            <div class="shortcut-item-url">${shortcut.url}</div>
+                        </div>
+                    </div>
+                    <div class="shortcut-item-actions">
+                        <button class="shortcut-edit-btn" onclick="window.appManager.openShortcutModal(${index})">✏️ Éditer</button>
+                        <button class="shortcut-delete-btn" onclick="window.appManager.deleteShortcut(${index})">🗑️ Supprimer</button>
+                    </div>
+                `;
+                shortcutsList.appendChild(item);
+            });
+        }
     }
 
     /**
