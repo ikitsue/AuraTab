@@ -1,19 +1,19 @@
 /**
  * AuraTab - Background Service Worker (Manifest V3)
- * Gestion des événements de navigation, tabs et sons du navigateur
+ * Manages navigation events, tabs, and browser sounds
  */
 
-// Configuration des sons
+// Sound configuration
 const SOUNDS = {
     TAB_OPEN: 'tab-open.wav',
     TAB_CLOSE: 'tab-close.wav',
     PAGE_RELOAD: 'page-reload.wav'
 };
 
-// Stockage des onglets ouverts pour détecter les nouvelles ouvertures
+// Track open tabs to detect new openings
 const openTabs = new Set();
 
-// Variables globales
+// Global variables
 let globalSettings = {
     volume: 70,
     soundEnabled: true,
@@ -31,63 +31,63 @@ const soundSpamProtection = {
 };
 
 /**
- * Initialisation du Service Worker
+ * Initialize the Service Worker
  */
 function initServiceWorker() {
     console.log('🚀 AuraTab Service Worker started');
     
-    // Charger les paramètres
+    // Load settings
     loadSettings();
     
-    // Configurer les écouteurs d'événements
+    // Setup event listeners
     setupEventListeners();
 }
 
 /**
- * Charger les paramètres depuis le stockage
+ * Load settings from storage
  */
 function loadSettings() {
     chrome.storage.local.get(null, (items) => {
         if (chrome.runtime.lastError) {
-            console.warn('⚠️ Avertissement stockage:', chrome.runtime.lastError.message);
+            console.warn('⚠️ Storage warning:', chrome.runtime.lastError.message);
         }
         if (items) {
             globalSettings = { ...globalSettings, ...items };
-            console.log('⚙️ Paramètres chargés');
+            console.log('⚙️ Settings loaded');
         }
     });
 }
 
 /**
- * Configuration des écouteurs d'événements
+ * Setup event listeners
  */
 function setupEventListeners() {
-    // Événement: nouvel onglet ouvert
+    // Event: new tab opened
     chrome.tabs.onCreated.addListener((tab) => {
         handleTabCreated(tab);
     });
 
-    // Événement: onglet fermé
+    // Event: tab closed
     chrome.tabs.onRemoved.addListener((tabId) => {
         handleTabRemoved(tabId);
     });
 
-    // Événement: page rechargée
+    // Event: page reloaded
     chrome.webNavigation.onBeforeNavigate.addListener((details) => {
         handlePageReload(details);
     }, { url: [{ urlMatches: '.*' }] });
 
-    // Événement: changement de paramètres depuis popup ou newtab
+    // Event: settings changed from popup or newtab
     chrome.storage.onChanged.addListener((changes, areaName) => {
         if (areaName === 'local') {
             for (let [key, { newValue }] of Object.entries(changes)) {
                 globalSettings[key] = newValue;
             }
-            console.log('⚙️ Paramètres mis à jour:', globalSettings);
+            console.log('⚙️ Settings updated:', globalSettings);
         }
     });
 
-    // Gérer les messages depuis d'autres scripts
+    // Handle messages from other scripts
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         handleMessage(request, sender, sendResponse);
         return true;
@@ -95,41 +95,41 @@ function setupEventListeners() {
 }
 
 /**
- * Gestion: nouvel onglet créé
+ * Handle: new tab created
  */
 function handleTabCreated(tab) {
-    // Ne pas jouer le son pour les onglets système
+    // Don't play sound for system tabs
     if (tab.url && (tab.url.startsWith('chrome://') || tab.url.startsWith('brave://'))) {
         return;
     }
 
-    // Jouer le son d'ouverture d'onglet
+    // Play tab open sound
     if (globalSettings.soundTabOpen && globalSettings.soundEnabled) {
         playSound(SOUNDS.TAB_OPEN);
     }
 
-    // Ajouter l'onglet à la liste
+    // Add tab to list
     openTabs.add(tab.id);
 }
 
 /**
- * Gestion: onglet fermé
+ * Handle: tab closed
  */
 function handleTabRemoved(tabId) {
-    // Jouer le son de fermeture d'onglet
+    // Play tab close sound
     if (openTabs.has(tabId) && globalSettings.soundTabClose && globalSettings.soundEnabled) {
         playSound(SOUNDS.TAB_CLOSE);
     }
 
-    // Supprimer de la liste
+    // Remove from list
     openTabs.delete(tabId);
 }
 
 /**
- * Gestion: rechargement de page
+ * Handle: page reload
  */
 function handlePageReload(details) {
-    // Vérifier si c'est un rechargement (frameId === 0 = frame principal)
+    // Check if it's a reload (frameId === 0 = main frame)
     if (details.frameId === 0 && details.transitionType === 'reload') {
         if (globalSettings.soundPageReload && globalSettings.soundEnabled) {
             playSound(SOUNDS.PAGE_RELOAD);
@@ -138,11 +138,11 @@ function handlePageReload(details) {
 }
 
 /**
- * Jouer un son avec protection anti-spam
- * @param {string} soundFile - Nom du fichier son
+ * Play a sound with spam protection
+ * @param {string} soundFile - Sound file name
  */
 function playSound(soundFile) {
-    // Protection anti-spam
+    // Spam protection
     const now = Date.now();
     const soundKey = soundFile.replace(/\.(mp3|wav)$/, '');
     const lastPlayTime = soundSpamProtection[soundKey] || 0;
@@ -154,30 +154,30 @@ function playSound(soundFile) {
     soundSpamProtection[soundKey] = now;
 
     try {
-        // Envoyer un message à tous les tabs pour jouer le son
-        // (Service Worker n'a pas accès à Audio API)
+        // Send message to all tabs to play sound
+        // (Service Worker doesn't have access to Audio API)
         chrome.tabs.query({}, (tabs) => {
             if (!tabs || !Array.isArray(tabs)) {
-                console.warn('⚠️ Pas de tabs disponibles');
+                console.warn('⚠️ No tabs available');
                 return;
             }
             tabs.forEach(tab => {
-                // Envoyer le message à chaque tab
+                // Send message to each tab
                 chrome.tabs.sendMessage(tab.id, {
                     action: 'playSoundFromBackground',
                     soundFile: soundFile
                 }).catch(() => {
-                    // Ignore les erreurs (tab peut ne pas être prêt)
+                    // Ignore errors (tab may not be ready)
                 });
             });
         });
     } catch (error) {
-        console.error('❌ Erreur lors de l\'envoi du message audio:', error);
+        console.error('❌ Error sending audio message:', error);
     }
 }
 
 /**
- * Gestion des messages depuis popup/newtab
+ * Handle messages from popup/newtab
  */
 function handleMessage(request, sender, sendResponse) {
     switch (request.action) {
@@ -203,7 +203,7 @@ function handleMessage(request, sender, sendResponse) {
             break;
 
         case 'testSounds':
-            // Tester tous les sons
+            // Test all sounds
             if (globalSettings.soundEnabled) {
                 setTimeout(() => {
                     if (globalSettings.soundTabOpen) playSound('tab-open.wav');
@@ -219,33 +219,33 @@ function handleMessage(request, sender, sendResponse) {
             break;
 
         default:
-            sendResponse({ error: 'Action non reconnue' });
+            sendResponse({ error: 'Unknown action' });
     }
 }
 
 /**
- * Obtenir les onglets ouverts au démarrage
+ * Get open tabs on startup
  */
 function initOpenTabs() {
     chrome.tabs.query({}, (tabs) => {
         tabs.forEach(tab => {
-            // Ne pas inclure les onglets système
+            // Don't include system tabs
             if (!tab.url.startsWith('chrome://') && !tab.url.startsWith('brave://')) {
                 openTabs.add(tab.id);
             }
         });
-        console.log('📊 Onglets ouverts initialisés:', openTabs.size);
+        console.log('📊 Open tabs initialized:', openTabs.size);
     });
 }
 
 /**
- * Installateur d'extension (première installation)
+ * Extension installer (first installation)
  */
 chrome.runtime.onInstalled.addListener((details) => {
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-        console.log('🎉 AuraTab installé!');
+        console.log('🎉 AuraTab installed!');
         
-        // Initialiser les paramètres par défaut
+        // Initialize default settings
         chrome.storage.local.set({
             volume: 70,
             soundEnabled: true,
@@ -257,26 +257,26 @@ chrome.runtime.onInstalled.addListener((details) => {
             showTime: true,
             wallpaper: null
         }, () => {
-            console.log('✅ Paramètres par défaut définis');
+            console.log('✅ Default settings initialized');
         });
 
-        // Ouvrir la page d'accueil/configuration
+        // Open home/setup page
         chrome.tabs.create({ url: 'newtab.html' });
     }
 
     if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
-        console.log('🔄 AuraTab mise à jour');
+        console.log('🔄 AuraTab updated');
     }
 });
 
 /**
- * Démarrage du Service Worker
- * Note: Service Worker n'a pas accès au DOM, initialisation directe
+ * Service Worker startup
+ * Note: Service Worker doesn't have DOM access, direct initialization
  */
 initServiceWorker();
 initOpenTabs();
 
-// Re-initialiser les onglets ouverts périodiquement (sécurité)
+// Re-initialize open tabs periodically (safety check)
 setInterval(() => {
     chrome.tabs.query({}, (tabs) => {
         const currentTabs = new Set();
@@ -286,11 +286,11 @@ setInterval(() => {
             }
         });
         
-        // Comparer avec les onglets enregistrés
+        // Compare with registered tabs
         for (let tabId of openTabs) {
             if (!currentTabs.has(tabId)) {
                 openTabs.delete(tabId);
             }
         }
     });
-}, 30000); // Vérification toutes les 30 secondes
+}, 30000); // Check every 30 seconds

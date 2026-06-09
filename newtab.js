@@ -76,7 +76,7 @@ class AuraTabManager {
                     return;
                 }
                 
-                // Fusionner avec les paramètres par défaut
+                // Merge with default settings
                 this.settings = { ...this.settings, ...items };
                 resolve();
             });
@@ -498,7 +498,7 @@ class AuraTabManager {
     }
 
     /**
-     * Mettre à jour l'horloge
+     * Format time in the selected timezone
      */
     updateClock() {
         const now = new Date();
@@ -734,7 +734,7 @@ class AuraTabManager {
     }
 
     /**
-     * Afficher une notification temporaire
+     * Display temporary notification
      */
     showNotification(message) {
         // Créer un élément de notification
@@ -947,10 +947,10 @@ class AuraTabManager {
     }
 
     /**
-     * Surveiller les modifications des paramètres
+     * Watch settings changes
      */
     monitorSettings() {
-        // Écouter les changements depuis d'autres onglets
+        // Listen for changes from other tabs
         chrome.storage.onChanged.addListener((changes, areaName) => {
             if (areaName === 'local') {
                 for (let [key, { newValue }] of Object.entries(changes)) {

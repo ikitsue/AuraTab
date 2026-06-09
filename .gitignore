@@ -4,7 +4,7 @@ npm-debug.log
 package-lock.json
 yarn.lock
 
-# Fichiers de build
+# Build files
 dist/
 build/
 *.crx
@@ -18,17 +18,17 @@ build/
 *~
 .DS_Store
 
-# Environnement
+# Environment
 .env
 .env.local
 .env.*.local
 
-# Fichiers temporaires
+# Temporary files
 *.tmp
 *.temp
 .cache/
 
-# Fichiers OS
+# OS files
 Thumbs.db
 .Spotlight-V100
 .Trashes
@@ -41,9 +41,9 @@ logs/
 coverage/
 .nyc_output/
 
-# Développement local
+# Local development
 debug.log
 
-# Dossier d'images optionnel (dossier temporaire)
+# Optional images folder (temporary folder)
 images/
 !images/README.md

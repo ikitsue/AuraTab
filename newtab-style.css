@@ -1,10 +1,10 @@
 /* ============================================================
-   AuraTab - Styles CSS
-   Thème: Cyberpunk/Gaming Moderne - Sombre et Fluide
+   AuraTab - CSS Styles
+   Theme: Modern Cyberpunk/Gaming - Dark and Fluid
    ============================================================ */
 
 :root {
-    /* Couleurs principales */
+    /* Primary colors */
     --primary-color: #00d9ff;
     --secondary-color: #ff006e;
     --tertiary-color: #8338ec;
@@ -19,11 +19,11 @@
     --danger-color: #ff3860;
     --warning-color: #ffb900;
     
-    /* Dégradés */
+    /* Gradients */
     --gradient-primary: linear-gradient(135deg, #00d9ff 0%, #8338ec 100%);
     --gradient-secondary: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
     
-    /* Espacements */
+    /* Spacing */
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
@@ -37,7 +37,7 @@
 }
 
 /* ============================================================
-   Reset et styles globaux
+   Reset and global styles
    ============================================================ */
 
 * {
@@ -62,7 +62,7 @@ body {
 }
 
 /* ============================================================
-   Fond d'écran
+   Wallpaper
    ============================================================ */
 
 .wallpaper-container {
@@ -98,7 +98,7 @@ body {
 }
 
 /* ============================================================
-   Conteneur principal
+   Main container
    ============================================================ */
 
 .main-container {
@@ -114,7 +114,7 @@ body {
 }
 
 /* ============================================================
-   En-tête (Horloge et Météo)
+   Header (Clock and Weather)
    ============================================================ */
 
 .header {
@@ -207,7 +207,7 @@ body {
 }
 
 /* ============================================================
-   Section Recherche
+   Search Section
    ============================================================ */
 
 .search-section {
@@ -255,7 +255,7 @@ body {
 }
 
 /* ============================================================
-   Suggestions de Recherche
+   Search Suggestions
    ============================================================ */
 
 .search-container {
@@ -417,7 +417,7 @@ body {
     font-weight: 500;
 }
 
-/* Conteneur des raccourcis avec bouton de suppression */
+/* Shortcuts container with delete button */
 .shortcut-container {
     position: relative;
 }
@@ -628,7 +628,7 @@ body {
     gap: var(--spacing-sm);
 }
 
-/* Prévisualisation du fond */
+/* Wallpaper preview */
 .wallpaper-preview {
     margin-bottom: var(--spacing-md);
 }
@@ -653,7 +653,7 @@ body {
     border-color: var(--primary-color);
 }
 
-/* Actions du fond */
+/* Wallpaper actions */
 .wallpaper-actions {
     display: flex;
     flex-direction: column;
@@ -701,7 +701,7 @@ body {
     color: var(--text-secondary);
 }
 
-/* Contrôles sonores */
+/* Sound controls */
 .sound-controls {
     display: flex;
     flex-direction: column;
@@ -812,7 +812,7 @@ body {
     text-align: right;
 }
 
-/* Options d'interface */
+/* Interface options */
 .option-toggle {
     display: flex;
     align-items: center;
@@ -834,7 +834,7 @@ body {
     color: var(--text-primary);
 }
 
-/* Pied de page des paramètres */
+/* Settings footer */
 .settings-footer {
     padding: var(--spacing-lg);
     border-top: 1px solid var(--border-color);
@@ -1122,6 +1122,10 @@ body {
 
 /* ============================================================
    Animations et transitions
+   ============================================================ */
+
+/* ============================================================
+   Animations
    ============================================================ */
 
 @keyframes fadeIn {
