@@ -113,6 +113,10 @@ class I18n {
             if (element.tagName === 'INPUT') {
                 element.placeholder = translation;
             } else if (element.tagName === 'BUTTON' || element.tagName === 'LABEL') {
+                // Skip buttons that contain SVG (icon-only buttons)
+                if (element.querySelector('svg')) {
+                    return;
+                }
                 element.textContent = translation;
             } else {
                 element.textContent = translation;
@@ -136,6 +140,10 @@ class I18n {
         if (element.tagName === 'INPUT') {
             element.placeholder = translation;
         } else if (element.tagName === 'BUTTON' || element.tagName === 'LABEL') {
+            // Skip buttons that contain SVG (icon-only buttons)
+            if (element.querySelector('svg')) {
+                return;
+            }
             element.textContent = translation;
         } else {
             element.textContent = translation;

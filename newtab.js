@@ -128,14 +128,6 @@ class AuraTabManager {
             });
         }
 
-        // Master sound button
-        const soundToggleBtn = document.getElementById('sound-toggle-btn');
-        if (soundToggleBtn) {
-            soundToggleBtn.addEventListener('click', () => {
-                this.toggleMasterSound();
-            });
-        }
-
         // Close settings by clicking outside
         const settingsModal = document.getElementById('settings-modal');
         if (settingsModal) {
