@@ -125,6 +125,11 @@ class I18n {
 
         // Update document language
         document.documentElement.lang = this.currentLanguage;
+        
+        // Update clock to reflect language change
+        if (window.appManager && typeof window.appManager.updateClock === 'function') {
+            window.appManager.updateClock();
+        }
     }
 
     /**

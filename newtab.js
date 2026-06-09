@@ -502,9 +502,31 @@ class AuraTabManager {
         const minutes = String(now.getMinutes()).padStart(2, '0');
         document.getElementById('time').textContent = `${hours}:${minutes}`;
 
-        // Formater la date
+        // Formater la date avec la langue actuelle
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const dateStr = now.toLocaleDateString('fr-FR', options);
+        
+        // Mapper les codes de langue vers les locales JavaScript
+        const localeMap = {
+            'fr': 'fr-FR',
+            'en': 'en-US',
+            'es': 'es-ES',
+            'de': 'de-DE',
+            'it': 'it-IT',
+            'ru': 'ru-RU',
+            'zh': 'zh-CN',
+            'ja': 'ja-JP',
+            'pt': 'pt-BR'
+        };
+        
+        // Récupérer la langue actuelle de i18n
+        let currentLang = 'en';
+        if (typeof i18n !== 'undefined' && i18n && i18n.currentLanguage) {
+            currentLang = i18n.currentLanguage;
+        }
+        
+        const locale = localeMap[currentLang] || 'en-US';
+        
+        const dateStr = now.toLocaleDateString(locale, options);
         document.getElementById('date').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
     }
 

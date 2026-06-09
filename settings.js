@@ -78,6 +78,8 @@ class AuraTabSettings {
                 i18n.setLanguage(newLanguage);
                 this.settings.language = newLanguage;
                 this.saveSettings();
+                // Update settings UI to show translated language names
+                this.updateSettingsUI();
             });
         }
     }
@@ -101,6 +103,22 @@ class AuraTabSettings {
         const languageSelect = document.getElementById('language-select');
         if (languageSelect) {
             languageSelect.value = this.settings.language;
+            
+            // Translate language options
+            const languageNames = {
+                'en': i18n.get('english'),
+                'fr': i18n.get('francais'),
+                'ru': i18n.get('russian'),
+                'zh': i18n.get('chinese'),
+                'es': i18n.get('spanish')
+            };
+            
+            languageSelect.querySelectorAll('option').forEach(option => {
+                const lang = option.value;
+                if (languageNames[lang]) {
+                    option.textContent = languageNames[lang];
+                }
+            });
         }
     }
 

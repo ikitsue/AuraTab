@@ -279,6 +279,39 @@
     font-size: 1rem;
     cursor: pointer;
     transition: all var(--transition-normal);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.select-input option {
+    background: #1a1f3a;
+    color: #00d9ff;
+    padding: 10px;
+    border: none;
+}
+
+.select-input option:checked {
+    background: #8338ec;
+    color: #ffffff;
+}
+
+.select-input option:hover {
+    background: #8338ec;
+    color: #ffffff;
+}
+
+.select-input::-webkit-scrollbar {
+    width: 8px;
+}
+
+.select-input::-webkit-scrollbar-track {
+    background: #1a1f3a;
+}
+
+.select-input::-webkit-scrollbar-thumb {
+    background: #8338ec;
+    border-radius: 4px;
 }
 
 .select-input:hover {
