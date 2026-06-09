@@ -58,7 +58,13 @@ class PopupManager {
      * Configuration des événements
      */
     setupEventListeners() {
-        // Aucun événement à configurer pour le moment
+        // Settings button - Open settings page
+        const settingsBtn = document.getElementById('settings-btn');
+        if (settingsBtn) {
+            settingsBtn.addEventListener('click', () => {
+                chrome.tabs.create({ url: chrome.runtime.getURL('settings.html') });
+            });
+        }
     }
 
     /**
