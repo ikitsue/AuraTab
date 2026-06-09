@@ -10,6 +10,7 @@ class AuraTabSettings {
             showShortcuts: true,
             showWeather: true,
             showTime: true,
+            showSeconds: false,
             wallpaper: null,
             shortcuts: [],
             searchEngine: 'google',

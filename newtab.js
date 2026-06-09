@@ -13,6 +13,7 @@ class AuraTabManager {
             showShortcuts: true,
             showWeather: true,
             showTime: true,
+            showSeconds: false,
             wallpaper: null,
             shortcuts: [],
             searchEngine: 'google'
@@ -191,6 +192,15 @@ class AuraTabManager {
             showTime.addEventListener('change', (e) => {
                 this.settings.showTime = e.target.checked;
                 this.updateUI();
+                this.saveSettings();
+            });
+        }
+
+        const showSeconds = document.getElementById('show-seconds');
+        if (showSeconds) {
+            showSeconds.addEventListener('change', (e) => {
+                this.settings.showSeconds = e.target.checked;
+                this.updateClock();
                 this.saveSettings();
             });
         }
@@ -573,13 +583,20 @@ class AuraTabManager {
             
             const timezone = city && timezoneMap[city] ? timezoneMap[city] : 'UTC';
             
-            // Format time in the selected timezone
-            const timeFormatter = new Intl.DateTimeFormat('en-US', {
+            // Format time in the selected timezone - with or without seconds
+            const timeFormatterOptions = {
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: false,
                 timeZone: timezone
-            });
+            };
+            
+            // Add seconds if enabled in settings
+            if (settings.showSeconds) {
+                timeFormatterOptions.second = '2-digit';
+            }
+            
+            const timeFormatter = new Intl.DateTimeFormat('en-US', timeFormatterOptions);
             
             const timeStr = timeFormatter.format(now);
             document.getElementById('time').textContent = timeStr;
@@ -727,8 +744,8 @@ class AuraTabManager {
      */
     async getSettingsFromStorage() {
         return new Promise((resolve) => {
-            chrome.storage.local.get(['auraTabSettings'], (result) => {
-                resolve(result.auraTabSettings || {});
+            chrome.storage.local.get(null, (result) => {
+                resolve(result || {});
             });
         });
     }
@@ -911,6 +928,7 @@ class AuraTabManager {
         document.getElementById('show-shortcuts').checked = this.settings.showShortcuts;
         document.getElementById('show-weather').checked = this.settings.showWeather;
         document.getElementById('show-time').checked = this.settings.showTime;
+        document.getElementById('show-seconds').checked = this.settings.showSeconds;
         document.getElementById('search-engine').value = this.settings.searchEngine;
 
         // Mettre à jour l'aperçu du fond
