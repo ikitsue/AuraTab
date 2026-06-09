@@ -1,49 +1,131 @@
-# Node modules
+# ==========================================
+# Node.js & Package Management
+# ==========================================
 node_modules/
 npm-debug.log
 package-lock.json
 yarn.lock
+pnpm-lock.yaml
+.pnpm-debug.log
 
-# Build files
+# ==========================================
+# Build & Distribution Files
+# ==========================================
 dist/
 build/
 *.crx
 *.pem
+out/
+*.zip
 
-# IDEs
+# ==========================================
+# IDE & Editor Configuration
+# ==========================================
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+*.sublime-project
+*.sublime-workspace
+.eclipse/
+*.project
+*.classpath
 
-# Environment
+# ==========================================
+# Environment & Configuration
+# ==========================================
 .env
 .env.local
 .env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Temporary files
+# ==========================================
+# Temporary Files
+# ==========================================
 *.tmp
 *.temp
 .cache/
+.tmp/
+tmp/
 
-# OS files
+# ==========================================
+# OS & System Files
+# ==========================================
 Thumbs.db
 .Spotlight-V100
 .Trashes
+.AppleDouble
+.LSOverride
+.TemporaryItems
+ehthumbs.db
+Desktop.ini
 
-# Logs
+# ==========================================
+# Logs & Debugging
+# ==========================================
 *.log
 logs/
+debug.log
+lerna-debug.log*
+yarn-error.log*
+npm-debug.log*
 
-# Tests
+# ==========================================
+# Testing & Coverage
+# ==========================================
 coverage/
 .nyc_output/
+.junit/
+test-results/
 
-# Local development
-debug.log
+# ==========================================
+# Local Development Files
+# ==========================================
+.DS_Store
+*.pem
+*.key
+local-settings.json
 
-# Optional images folder (temporary folder)
-images/
-!images/README.md
+# ==========================================
+# Backup Files
+# ==========================================
+*.bak
+*.backup
+*.orig
+*~
+*.swp
+
+# ==========================================
+# Archive Files (except those needed for distribution)
+# ==========================================
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# ==========================================
+# Documentation Build Files
+# ==========================================
+docs/_build/
+site/
+.vuepress/dist/
+
+# ==========================================
+# VSCode Specific
+# ==========================================
+.vscode-test/
+.vscode/*.log
+.vscode-test
+.vscode-debug
+
+# ==========================================
+# Git Specific
+# ==========================================
+.git/
+.gitignore~
+.github/workflows/*.log
