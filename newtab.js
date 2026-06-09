@@ -50,6 +50,12 @@ class AuraTabManager {
             // Update interface according to settings
             this.updateUI();
             
+            // Load weather for selected location
+            await this.loadWeather();
+            
+            // Refresh weather every 10 minutes
+            setInterval(() => this.loadWeather(), 600000);
+            
             // Record settings changes
             this.monitorSettings();
             
@@ -497,37 +503,234 @@ class AuraTabManager {
     updateClock() {
         const now = new Date();
         
-        // Formater l'heure
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('time').textContent = `${hours}:${minutes}`;
+        // Try to get location-based timezone
+        this.getSettingsFromStorage().then(settings => {
+            const city = settings.city || '';
+            
+            // Mapping of cities to timezones
+            const timezoneMap = {
+                // United States
+                'New York': 'America/New_York',
+                'Los Angeles': 'America/Los_Angeles',
+                'Chicago': 'America/Chicago',
+                // United Kingdom
+                'London': 'Europe/London',
+                'Manchester': 'Europe/London',
+                'Liverpool': 'Europe/London',
+                // France
+                'Paris': 'Europe/Paris',
+                'Lyon': 'Europe/Paris',
+                'Marseille': 'Europe/Paris',
+                // Germany
+                'Berlin': 'Europe/Berlin',
+                'Munich': 'Europe/Berlin',
+                'Hamburg': 'Europe/Berlin',
+                // Italy
+                'Rome': 'Europe/Rome',
+                'Milan': 'Europe/Rome',
+                'Venice': 'Europe/Rome',
+                // Spain
+                'Madrid': 'Europe/Madrid',
+                'Barcelona': 'Europe/Madrid',
+                'Valencia': 'Europe/Madrid',
+                // Canada
+                'Toronto': 'America/Toronto',
+                'Vancouver': 'America/Vancouver',
+                'Montreal': 'America/Toronto',
+                // Australia
+                'Sydney': 'Australia/Sydney',
+                'Melbourne': 'Australia/Melbourne',
+                'Brisbane': 'Australia/Brisbane',
+                // Japan
+                'Tokyo': 'Asia/Tokyo',
+                'Osaka': 'Asia/Tokyo',
+                'Kyoto': 'Asia/Tokyo',
+                // China
+                'Beijing': 'Asia/Shanghai',
+                'Shanghai': 'Asia/Shanghai',
+                'Guangzhou': 'Asia/Shanghai',
+                // Russia
+                'Moscow': 'Europe/Moscow',
+                'Saint Petersburg': 'Europe/Moscow',
+                'Novosibirsk': 'Asia/Novosibirsk',
+                // Brazil
+                'São Paulo': 'America/Sao_Paulo',
+                'Rio de Janeiro': 'America/Sao_Paulo',
+                'Brasília': 'America/Sao_Paulo',
+                // Mexico
+                'Mexico City': 'America/Mexico_City',
+                'Guadalajara': 'America/Mexico_City',
+                'Monterrey': 'America/Mexico_City',
+                // India
+                'Delhi': 'Asia/Kolkata',
+                'Mumbai': 'Asia/Kolkata',
+                'Bangalore': 'Asia/Kolkata',
+                // South Korea
+                'Seoul': 'Asia/Seoul',
+                'Busan': 'Asia/Seoul',
+                'Incheon': 'Asia/Seoul'
+            };
+            
+            const timezone = city && timezoneMap[city] ? timezoneMap[city] : 'UTC';
+            
+            // Format time in the selected timezone
+            const timeFormatter = new Intl.DateTimeFormat('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+                timeZone: timezone
+            });
+            
+            const timeStr = timeFormatter.format(now);
+            document.getElementById('time').textContent = timeStr;
+            
+            // Format date with current language
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            
+            // Map language codes to JavaScript locales
+            const localeMap = {
+                'fr': 'fr-FR',
+                'en': 'en-US',
+                'es': 'es-ES',
+                'de': 'de-DE',
+                'it': 'it-IT',
+                'ru': 'ru-RU',
+                'zh': 'zh-CN',
+                'ja': 'ja-JP',
+                'pt': 'pt-BR'
+            };
+            
+            // Get current language from i18n
+            let currentLang = 'en';
+            if (typeof i18n !== 'undefined' && i18n && i18n.currentLanguage) {
+                currentLang = i18n.currentLanguage;
+            }
+            
+            const locale = localeMap[currentLang] || 'en-US';
+            
+            // Format date in selected timezone
+            const dateFormatter = new Intl.DateTimeFormat(locale, {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                timeZone: timezone
+            });
+            
+            const dateStr = dateFormatter.format(now);
+            document.getElementById('date').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+        });
+    }
 
-        // Formater la date avec la langue actuelle
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        
-        // Mapper les codes de langue vers les locales JavaScript
-        const localeMap = {
-            'fr': 'fr-FR',
-            'en': 'en-US',
-            'es': 'es-ES',
-            'de': 'de-DE',
-            'it': 'it-IT',
-            'ru': 'ru-RU',
-            'zh': 'zh-CN',
-            'ja': 'ja-JP',
-            'pt': 'pt-BR'
-        };
-        
-        // Récupérer la langue actuelle de i18n
-        let currentLang = 'en';
-        if (typeof i18n !== 'undefined' && i18n && i18n.currentLanguage) {
-            currentLang = i18n.currentLanguage;
+    /**
+     * Load weather for selected location
+     */
+    async loadWeather() {
+        try {
+            // Get settings from storage
+            const settings = await this.getSettingsFromStorage();
+            const city = settings.city || '';
+            const country = settings.country || '';
+
+            if (!city || !country) {
+                // No location selected, hide or show default
+                document.getElementById('temp').textContent = '--°C';
+                return;
+            }
+
+            // Get coordinates for the city
+            const coords = await this.getCoordinates(city, country);
+            if (!coords) {
+                console.error('Could not get coordinates for:', city, country);
+                document.getElementById('temp').textContent = '--°C';
+                return;
+            }
+
+            // Get temperature from Open-Meteo
+            const temp = await this.getTemperature(coords.lat, coords.lon);
+            if (temp !== null) {
+                document.getElementById('temp').textContent = `${temp}°C`;
+            } else {
+                document.getElementById('temp').textContent = '--°C';
+            }
+        } catch (error) {
+            console.error('Error loading weather:', error);
+            document.getElementById('temp').textContent = '--°C';
         }
-        
-        const locale = localeMap[currentLang] || 'en-US';
-        
-        const dateStr = now.toLocaleDateString(locale, options);
-        document.getElementById('date').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+    }
+
+    /**
+     * Get coordinates from city name using Nominatim
+     */
+    async getCoordinates(city, country) {
+        try {
+            // Map country codes to country names
+            const countryMap = {
+                'us': 'United States',
+                'gb': 'United Kingdom',
+                'fr': 'France',
+                'de': 'Germany',
+                'it': 'Italy',
+                'es': 'Spain',
+                'ca': 'Canada',
+                'au': 'Australia',
+                'jp': 'Japan',
+                'cn': 'China',
+                'ru': 'Russia',
+                'br': 'Brazil',
+                'mx': 'Mexico',
+                'in': 'India',
+                'kr': 'South Korea'
+            };
+
+            const countryName = countryMap[country] || country;
+            const query = `${city}, ${countryName}`;
+            
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json`);
+            const data = await response.json();
+
+            if (data && data.length > 0) {
+                return {
+                    lat: parseFloat(data[0].lat),
+                    lon: parseFloat(data[0].lon)
+                };
+            }
+            return null;
+        } catch (error) {
+            console.error('Error getting coordinates:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Get temperature from Open-Meteo API
+     */
+    async getTemperature(lat, lon) {
+        try {
+            const response = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m&temperature_unit=celsius`
+            );
+            const data = await response.json();
+
+            if (data && data.current) {
+                return Math.round(data.current.temperature_2m);
+            }
+            return null;
+        } catch (error) {
+            console.error('Error getting temperature:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Get settings from storage
+     */
+    async getSettingsFromStorage() {
+        return new Promise((resolve) => {
+            chrome.storage.local.get(['auraTabSettings'], (result) => {
+                resolve(result.auraTabSettings || {});
+            });
+        });
     }
 
     /**
@@ -754,6 +957,11 @@ class AuraTabManager {
                     this.settings[key] = newValue;
                 }
                 this.updateUI();
+                
+                // Reload weather if location changed
+                if (changes.auraTabSettings) {
+                    this.loadWeather();
+                }
             }
         });
     }

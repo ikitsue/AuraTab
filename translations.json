@@ -64,7 +64,10 @@
     "invalid_url": "❌ Invalid URL",
     "shortcut_edited": "✅ Shortcut edited",
     "shortcut_added": "✅ Shortcut added",
-    "settings_saved": "✅ Settings saved!"
+    "settings_saved": "✅ Settings saved!",
+    "location": "📍 Location",
+    "select_country": "Select your country",
+    "select_city": "Select your city"
   },
   "fr": {
     "title": "AuraTab - Nouvel Onglet",
@@ -131,7 +134,10 @@
     "invalid_url": "❌ URL invalide",
     "shortcut_edited": "✅ Raccourci modifié",
     "shortcut_added": "✅ Raccourci ajouté",
-    "settings_saved": "✅ Paramètres enregistrés!"
+    "settings_saved": "✅ Paramètres enregistrés!",
+    "location": "📍 Localisation",
+    "select_country": "Sélectionnez votre pays",
+    "select_city": "Sélectionnez votre ville"
   },
   "ru": {
     "title": "AuraTab - Новая вкладка",
@@ -198,7 +204,10 @@
     "invalid_url": "❌ Неверный URL",
     "shortcut_edited": "✅ Ярлык отредактирован",
     "shortcut_added": "✅ Ярлык добавлен",
-    "settings_saved": "✅ Параметры сохранены!"
+    "settings_saved": "✅ Параметры сохранены!",
+    "location": "📍 Местоположение",
+    "select_country": "Выберите вашу страну",
+    "select_city": "Выберите ваш город"
   },
   "zh": {
     "title": "AuraTab - 新标签页",
@@ -265,7 +274,10 @@
     "invalid_url": "❌ URL无效",
     "shortcut_edited": "✅ 快捷方式已编辑",
     "shortcut_added": "✅ 快捷方式已添加",
-    "settings_saved": "✅ 设置已保存!"
+    "settings_saved": "✅ 设置已保存!",
+    "location": "📍 位置",
+    "select_country": "选择您的国家",
+    "select_city": "选择您的城市"
   },
   "es": {
     "title": "AuraTab - Nueva Pestaña",
@@ -332,6 +344,9 @@
     "invalid_url": "❌ URL inválida",
     "shortcut_edited": "✅ Atajo editado",
     "shortcut_added": "✅ Atajo añadido",
-    "settings_saved": "✅ ¡Configuración guardada!"
+    "settings_saved": "✅ ¡Configuración guardada!",
+    "location": "📍 Ubicación",
+    "select_country": "Selecciona tu país",
+    "select_city": "Selecciona tu ciudad"
   }
 }

@@ -13,7 +13,28 @@ class AuraTabSettings {
             wallpaper: null,
             shortcuts: [],
             searchEngine: 'google',
-            language: 'fr'
+            language: 'fr',
+            country: '',
+            city: ''
+        };
+        
+        // Cities by country
+        this.citiesByCountry = {
+            'us': ['New York', 'Los Angeles', 'Chicago'],
+            'gb': ['London', 'Manchester', 'Liverpool'],
+            'fr': ['Paris', 'Lyon', 'Marseille'],
+            'de': ['Berlin', 'Munich', 'Hamburg'],
+            'it': ['Rome', 'Milan', 'Venice'],
+            'es': ['Madrid', 'Barcelona', 'Valencia'],
+            'ca': ['Toronto', 'Vancouver', 'Montreal'],
+            'au': ['Sydney', 'Melbourne', 'Brisbane'],
+            'jp': ['Tokyo', 'Osaka', 'Kyoto'],
+            'cn': ['Beijing', 'Shanghai', 'Guangzhou'],
+            'ru': ['Moscow', 'Saint Petersburg', 'Novosibirsk'],
+            'br': ['São Paulo', 'Rio de Janeiro', 'Brasília'],
+            'mx': ['Mexico City', 'Guadalajara', 'Monterrey'],
+            'in': ['Delhi', 'Mumbai', 'Bangalore'],
+            'kr': ['Seoul', 'Busan', 'Incheon']
         };
         
         this.init();
@@ -82,6 +103,28 @@ class AuraTabSettings {
                 this.updateSettingsUI();
             });
         }
+        
+        // Country
+        const countrySelect = document.getElementById('country-select');
+        if (countrySelect) {
+            countrySelect.addEventListener('change', (e) => {
+                const country = e.target.value;
+                this.settings.country = country;
+                this.settings.city = '';
+                this.updateCitySelect();
+                this.saveSettings();
+            });
+        }
+        
+        // City
+        const citySelect = document.getElementById('city-select');
+        if (citySelect) {
+            citySelect.addEventListener('change', (e) => {
+                const city = e.target.value;
+                this.settings.city = city;
+                this.saveSettings();
+            });
+        }
     }
 
     /**
@@ -92,6 +135,34 @@ class AuraTabSettings {
         const volumeDisplay = document.getElementById('volume-display');
         if (volumeSlider && volumeDisplay) {
             volumeDisplay.textContent = volumeSlider.value + '%';
+        }
+    }
+
+    /**
+     * Update city select based on selected country
+     */
+    updateCitySelect() {
+        const citySelect = document.getElementById('city-select');
+        const country = this.settings.country;
+        
+        if (!citySelect) return;
+        
+        // Clear existing options
+        citySelect.innerHTML = '<option value="">Choose a city...</option>';
+        
+        // Add cities for selected country
+        if (country && this.citiesByCountry[country]) {
+            this.citiesByCountry[country].forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        }
+        
+        // Restore saved city if available
+        if (this.settings.city) {
+            citySelect.value = this.settings.city;
         }
     }
 
@@ -120,6 +191,15 @@ class AuraTabSettings {
                 }
             });
         }
+        
+        // Update country select
+        const countrySelect = document.getElementById('country-select');
+        if (countrySelect) {
+            countrySelect.value = this.settings.country;
+        }
+        
+        // Update city select
+        this.updateCitySelect();
     }
 
     /**
