@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "AuraTab - New Tab & Sounds",
   "version": "1.0.0",
-  "description": "Personnalisez votre nouvel onglet avec des fonds dynamiques et des effets sonores navigateur",
+  "description": "Personnalisez votre nouvel onglet avec des fonds dynamiques navigateur",
   "author": "AuraTab Team",
   
   "permissions": [
