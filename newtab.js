@@ -71,14 +71,24 @@ class AuraTabManager {
      */
     async loadSettings() {
         return new Promise((resolve, reject) => {
-            chrome.storage.local.get(null, (items) => {
+            // Try to load from auraTabSettings first (created by settings.js)
+            chrome.storage.local.get(['auraTabSettings'], (result) => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                     return;
                 }
                 
-                // Merge with default settings
-                this.settings = { ...this.settings, ...items };
+                if (result.auraTabSettings) {
+                    // Merge auraTabSettings with default settings
+                    this.settings = { ...this.settings, ...result.auraTabSettings };
+                } else {
+                    // Fallback: load all items (legacy support)
+                    chrome.storage.local.get(null, (items) => {
+                        this.settings = { ...this.settings, ...items };
+                        resolve();
+                        return;
+                    });
+                }
                 resolve();
             });
         });
@@ -89,7 +99,8 @@ class AuraTabManager {
      */
     async saveSettings() {
         return new Promise((resolve, reject) => {
-            chrome.storage.local.set(this.settings, () => {
+            // Save with auraTabSettings key to be consistent with settings.js
+            chrome.storage.local.set({ auraTabSettings: this.settings }, () => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                     return;
@@ -744,8 +755,16 @@ class AuraTabManager {
      */
     async getSettingsFromStorage() {
         return new Promise((resolve) => {
-            chrome.storage.local.get(null, (result) => {
-                resolve(result || {});
+            // Try to load from auraTabSettings first
+            chrome.storage.local.get(['auraTabSettings'], (result) => {
+                if (result.auraTabSettings) {
+                    resolve(result.auraTabSettings);
+                } else {
+                    // Fallback: load all items
+                    chrome.storage.local.get(null, (result) => {
+                        resolve(result || {});
+                    });
+                }
             });
         });
     }
@@ -971,14 +990,21 @@ class AuraTabManager {
         // Listen for changes from other tabs
         chrome.storage.onChanged.addListener((changes, areaName) => {
             if (areaName === 'local') {
-                for (let [key, { newValue }] of Object.entries(changes)) {
-                    this.settings[key] = newValue;
-                }
-                this.updateUI();
-                
-                // Reload weather if location changed
+                // Update settings from auraTabSettings if it changed
                 if (changes.auraTabSettings) {
+                    this.settings = { ...this.settings, ...changes.auraTabSettings.newValue };
+                    this.updateUI();
+                    
+                    // Reload weather and clock if location changed
                     this.loadWeather();
+                    this.updateClock();
+                }
+                
+                // Also handle individual setting changes for backward compatibility
+                for (let [key, { newValue }] of Object.entries(changes)) {
+                    if (key !== 'auraTabSettings') {
+                        this.settings[key] = newValue;
+                    }
                 }
             }
         });
